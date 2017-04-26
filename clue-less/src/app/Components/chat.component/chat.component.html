@@ -1,0 +1,8 @@
+<div *ngIf="!isLoggedIn"> <!--*ngIf means that this will only get rendered on the DOM if it is true.  Otherwise it won't even be present meaning it isn't hidden it just doesn't exist-->
+  <input type="text" #userName placeholder="Enter Username here..." /><button type="button" (click)="logIn(userName.value)" value="Submit" name="Submit">Submit</button>
+</div>
+<div *ngIf="isLoggedIn">
+  <label>Your Name is: {{message.userName}}</label>
+  <input type="text" [(ngModel)]="message.message" placeholder="Enter message to send..." /><button type="button" (click)="sendMessage()" value="Submit" name="Submit">Submit</button>
+</div>
+<div *ngFor="let message of messages">{{message.userName}} says: {{message.message}}</div> <!--You don't use the qualifier of this. when in the template.  Just reference the properties directly by their name-->
