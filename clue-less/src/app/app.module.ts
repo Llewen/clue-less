@@ -12,12 +12,14 @@ import {SelectButtonModule} from 'primeng/primeng';
 import { AppComponent } from './Components/app.component/app.component';
 import { ChatComponent } from './Components/chat.component/chat.component';
 import { GameComponent } from './Components/game.component/game.component';
+import { PlayingGameComponent } from './Components/playing-game/playing-game.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatComponent,
-    GameComponent //this lets the app know how to inject the chat component anywhere were <chat></chat> is in a template
+    GameComponent,
+    PlayingGameComponent //this lets the app know how to inject the chat component anywhere were <chat></chat> is in a template
   ],
   imports: [
     BrowserModule,
