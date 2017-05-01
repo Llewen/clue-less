@@ -7,7 +7,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PlayingGameComponent implements OnInit {
 
-  constructor() { }
+  imageRoot;
+  imagePaths;
+  
+
+  constructor() { 
+    this.imageRoot = "../../../../assets/images/";
+    this.imagePaths = {
+      ColMustard: this.imageRoot + "Colonel Mustard.png",
+      MissWhite: this.imageRoot + "Miss White.png",
+      MrGreen: this.imageRoot + "Mr. Green.png",
+      MrsPeacock: this.imageRoot + "Mrs. Peacock.png",
+      ProfPlum: this.imageRoot + "Prof Plum.png",
+      MissScarlett: this.imageRoot + "Miss Scarlett.png",
+    }
+  }
 
   ngOnInit() {
   }
