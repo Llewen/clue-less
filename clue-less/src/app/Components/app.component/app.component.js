@@ -10,6 +10,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 //socket.io
 const io = require("socket.io-client");
+
 let AppComponent = class AppComponent {
     constructor() {
         this.message = 'app works!';
