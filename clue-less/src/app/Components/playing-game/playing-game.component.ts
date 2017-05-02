@@ -15,7 +15,7 @@ export class PlayingGameComponent implements OnInit {
     this.imageRoot = "../../../../assets/images/";
     this.imagePaths = {
       ColMustard: this.imageRoot + "Colonel Mustard.png",
-      MissWhite: this.imageRoot + "Miss White.png",
+      MissWhite: this.imageRoot + "Miss White.jpeg",
       MrGreen: this.imageRoot + "Mr. Green.png",
       MrsPeacock: this.imageRoot + "Mrs. Peacock.png",
       ProfPlum: this.imageRoot + "Prof Plum.png",

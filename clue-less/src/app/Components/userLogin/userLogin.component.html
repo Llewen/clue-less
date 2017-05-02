@@ -1,0 +1,5 @@
+<div class="container">
+    <input type="text" placeholder="Enter Username here..." [(ngModel)]="userName" />
+    <button type="button" (click)="logIn()" value="Submit" name="Submit">Submit</button>
+    <span *ngIf="!isValid">Username is already in use.  Please select another.</span>
+</div>
