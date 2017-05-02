@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 
 //custom classes
-import { Player } from "../../Classes/player.class";
+import { Player } from "../../../../../common/Classes/player.class";
 
 @Component({
   selector: 'lobby',

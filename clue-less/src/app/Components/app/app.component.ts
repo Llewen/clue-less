@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import * as io from 'socket.io-client'
 
 //custom classes
-import { Player } from '../../Classes/player.class';
+import { Player } from '../../../../../common/Classes/player.class';
 
 
 @Component({
@@ -33,7 +33,13 @@ export class AppComponent implements OnInit {
    //constructors
    ngOnInit(){
       this.socket = io("http://localhost:3001/");
-      this.socket.on('new user', (msg) => this.receiveNewUser(msg));
+
+      //initial messages from server
+      this.socket.on('player list', (msg) => this.initializePlayers(msg));
+
+      //server messages around logged on users
+      this.socket.on('remove user', (msg) => this.removeUserFromPlayerList(msg));
+      this.socket.on('add user', (msg) => this.addUserToPlayerList(msg));
 
       this.route = "lobby"; 
     }
@@ -45,30 +51,39 @@ export class AppComponent implements OnInit {
       this.route = route;
    }
 
+   //pertaining to initializing variables from server
+   initializePlayers(players: Array<Player>)
+   {
+     this.playerList = players;
+   }
+
    logOut()
    {
-     this.socket.emit('user message', this.player);     
+     this.socket.emit('remove user', this.player);     
      this.player = new Player("");
      this.isLoggedIn = false;
      this.navigate("lobby");
    }
 
-   //pertaining to log-in
-   receiveNewUser(user: Player) {
-     let existingPlayerIndex = this.playerList.map(p => p.userName).indexOf(user.userName);
-     if(existingPlayerIndex !== -1)
-     {
-        this.playerList.splice(existingPlayerIndex, 1);
-     }
-     else{
-       this.playerList.push(user);
-     }
+
+
+   //pertaining to log-in, log-out of users
+   addUserToPlayerList(user: Player){
+      this.playerList.push(user);
    }
 
-   addUser(userName: string){
+   removeUserFromPlayerList(user: Player){
+      let existingPlayerIndex = this.playerList.map(p => p.userName).indexOf(user.userName);
+      if(existingPlayerIndex != -1)
+      {
+        this.playerList.splice(existingPlayerIndex, 1);
+      }
+   }
+
+   addUser(userName: string){    
+    this.isValidUserName = true;     
     this.playerList.forEach((user) => 
     {
-      this.isValidUserName = true;
       if(user.userName.toLowerCase() == userName.toLowerCase())
       {
         this.isValidUserName = false;
@@ -78,7 +93,7 @@ export class AppComponent implements OnInit {
     if(this.isValidUserName)
     {
       this.player.userName = userName;
-      this.socket.emit('user message', this.player);
+      this.socket.emit('add user', this.player);
       this.isLoggedIn = true;
       this.navigate("lobby");
     }
