@@ -26,9 +26,9 @@ io.on('connection', function(socket){
     io.emit('lobby message', msg);
   });
 
-  socket.on('new user', function(msg){
-    console.log("new user: " + msg);
-    io.emit('new user', msg);
+  socket.on('user message', function(msg){
+    console.log("user message: " + msg);
+    io.emit('user message', msg);
   })
 });
 

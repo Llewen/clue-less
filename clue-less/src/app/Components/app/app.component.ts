@@ -47,6 +47,7 @@ export class AppComponent implements OnInit {
 
    logOut()
    {
+     this.socket.emit('user message', this.player);     
      this.player = new Player("");
      this.isLoggedIn = false;
      this.navigate("lobby");
@@ -54,7 +55,14 @@ export class AppComponent implements OnInit {
 
    //pertaining to log-in
    receiveNewUser(user: Player) {
-    this.playerList.push(user);
+     let existingPlayerIndex = this.playerList.map(p => p.userName).indexOf(user.userName);
+     if(existingPlayerIndex !== -1)
+     {
+        this.playerList.splice(existingPlayerIndex, 1);
+     }
+     else{
+       this.playerList.push(user);
+     }
    }
 
    addUser(userName: string){
@@ -70,7 +78,7 @@ export class AppComponent implements OnInit {
     if(this.isValidUserName)
     {
       this.player.userName = userName;
-      this.socket.emit('new user', this.player);
+      this.socket.emit('user message', this.player);
       this.isLoggedIn = true;
       this.navigate("lobby");
     }
