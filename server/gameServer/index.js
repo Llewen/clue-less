@@ -1,6 +1,7 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var players = new Array();
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
 });
@@ -13,6 +14,14 @@ io.on('connection', function (socket) {
     socket.on('game message', function (msg) {
         console.log("game message: " + msg);
         io.emit('game message', msg);
+    });
+    socket.on('lobby message', function (msg) {
+        console.log("lobby message: " + msg);
+        io.emit('lobby message', msg);
+    });
+    socket.on('new user', function (msg) {
+        console.log("new user: " + msg);
+        io.emit('new user', msg);
     });
 });
 http.listen(3001, function () {
