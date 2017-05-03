@@ -30,6 +30,9 @@ export class AppComponent implements OnInit {
 
    //lobby component properties
    isValidLobbyName: boolean = true;
+
+   //game component properties
+   lobby: Lobby;
    
    //local properties
    route: string;
@@ -128,9 +131,9 @@ export class AppComponent implements OnInit {
 
      if(this.isValidLobbyName)
      {
-        let newLobby = new Lobby(lobbyName, this.player);
-        newLobby.players.push(this.player);
-        this.socket.emit('add lobby', newLobby)
+        this.lobby = new Lobby(lobbyName, this.player);
+        this.lobby.players.push(this.player);
+        this.socket.emit('add lobby', this.lobby)
         this.navigate("game");
      }
    }
@@ -142,6 +145,11 @@ export class AppComponent implements OnInit {
      {
        this.lobbyList.splice(existingLobbyIndex, 1);
      }
+     if(this.lobby && this.lobby.host.serverId == lobby.host.serverId)
+     {
+       this.lobby = null;
+       this.navigate("lobby");
+     }
    }
 
    addLobbyToLobbyList(lobby: Lobby)
@@ -152,7 +160,8 @@ export class AppComponent implements OnInit {
    joinLobby(lobby: Lobby)
    {
       lobby.players.push(this.player);
-      this.socket.emit('update lobby', lobby);
+      this.lobby = lobby;
+      this.socket.emit('update lobby', this.lobby);
       this.navigate("game");
    }
 
@@ -162,6 +171,19 @@ export class AppComponent implements OnInit {
      if(existingLobbyIndex != -1)
      {
        this.lobbyList[existingLobbyIndex].players = lobby.players;
+       this.lobbyList[existingLobbyIndex].game = lobby.game;
      }
+     if(this.lobby && this.lobby.host.serverId == lobby.host.serverId)
+     {
+       this.lobby.players = lobby.players;
+       this.lobby.game = lobby.game;
+     }
+   }
+
+   //pertaining to game
+   registerStartGame(lobby: Lobby)
+   {
+     this.lobby.game = lobby.game;
+     this.socket.emit('update lobby', this.lobby);
    }
 }

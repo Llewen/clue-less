@@ -24,10 +24,11 @@ io.on('connection', function(socket){
     io.emit('chat message', msg);
   });
 
-  socket.on('game message', function(msg){
-    console.log("game message: " + JSON.stringify(msg));
-    io.emit('game message', msg);
-  });
+//releated to the game
+socket.on('game message', function(id, msg){
+  console.log("sending game message to: " + id.toString() + JSON.stringify(msg) );
+  socket.broadcast.to(id).emit('game message', msg);
+});
 
 
 //related to lobbies
@@ -47,7 +48,7 @@ io.on('connection', function(socket){
 
   socket.on('update lobby', function(msg){
     updateLobby(msg);
-    console.log("lobby now has: " + msg.players.length)
+    console.log("updating lobby: " + JSON.stringify(msg));
     socket.join(msg.name);
     socket.broadcast.emit('update lobby', msg)
   });
@@ -71,7 +72,7 @@ io.on('connection', function(socket){
   //disonnect
   socket.on('disconnect', function(){
     removeUser(socket.id);
-    var lobbyName = removeFromLobbyPlayers(socket.id);
+    var lobbyName = removePlayersFromLobby(socket.id);
     if(lobbyName)
     {
       socket.leave(lobbyName);
@@ -106,7 +107,7 @@ function removeLobby(serverId)
     }
 }
 
-function removeFromLobbyPlayers(serverId)
+function removePlayersFromLobby(serverId)
 {
   for(var x = 0; x < lobbies.length; x++)
   {
@@ -127,5 +128,6 @@ function updateLobby(lobby: Lobby)
     if(index != -1)
     {
       lobbies[index].players = lobby.players;
+      lobbies[index].game = lobby.game;
     }
 }

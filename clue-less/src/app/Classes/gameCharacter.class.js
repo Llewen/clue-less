@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class GameCharacter {
-    constructor(name) {
+    constructor(name, imgPath) {
         this.name = name;
+        this.img = imgPath;
     }
 }
 exports.GameCharacter = GameCharacter;

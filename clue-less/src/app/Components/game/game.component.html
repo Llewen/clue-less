@@ -1,9 +1,54 @@
-<div class="row">
+<div *ngIf="!game.isStarted" style="z-index: 1001; width: 100%; height: 100%; background:rgba(0,0,0,.5); position: absolute;">
+  <div style="z-index: 1002; background: white; position: absolute; margin-left:250px; margin-top:100px">
+    <span>Please wait for more players to join!</span>
+    <span>Current player count: {{lobby.players.length}}</span>
+    <button *ngIf="lobby.players.length > 1 && player.serverId == lobby.host.serverId" type="button" (click)="startGame()">Start</button>
+  </div>
+</div>
+
+<div style="width:900px;" class="pull-left">
+  <div style="width:100%;">
+    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>Study</a></div>
+    <div style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table"><a></a></div>
+    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>Hall</a></div>
+    <div style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table"><a></a></div>
+    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>Lounge</a></div>
+  </div>
+  <div style="width:100%">
+    <div style="width:40px; height:120px; background:tan; display:inline-block"><a></a></div>
+    <div style="width:40px; height:120px; margin-left:255px; background:tan; display:inline-block"><a></a></div>
+    <div style="width:40px; height:120px; margin-left:253px; background:tan; display:inline-block"><a></a></div>    
+  </div>
+  <div style="width:100%">
+    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>Library</a></div>
+    <div style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table"><a></a></div>
+    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>Billiard Room</a></div>
+    <div style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table"><a></a></div>
+    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>Dining Room</a></div>
+  </div>
+  <div style="width:100%">
+    <div style="width:40px; height:120px; background:tan; display:inline-block"><a></a></div>
+    <div style="width:40px; height:120px; margin-left:255px; background:tan; display:inline-block"><a></a></div>
+    <div style="width:40px; height:120px; margin-left:253px; background:tan; display:inline-block"><a></a></div>    
+  </div>
+  <div style="width:100%">
+    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>Conservatory</a></div>
+    <div style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table"><a></a></div>
+    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>Ball Room</a></div>
+    <div style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table"><a></a></div>
+    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>Kitchen</a></div>
+  </div>
+</div>
+
+
+
+<!--<div class="row">
   <div class="col-sm-1">
         <img class="img-responsive" src="{{characterImgPath.MissWhite}}" alt="Card image cap" style="width: 75%;">
   </div>
-  <div class="col-sm-7">
-    <img class="img-responsive" src="{{boardPath}}" alt="Card image cap" style="height:75%;">
+  <div class="col-sm-1">
+    <img class="img-responsive" src="{{studyPath}}" />
+    img class="img-responsive" src="{{boardPath}}" alt="Card image cap" style="height:75%;">
   </div>
   <div class="col-sm-1">
     <img class="img-responsive" src="{{characterImgPath.ColMustard}}" alt="Card image cap" style="width: 75%;">
@@ -14,4 +59,4 @@
 </div>
 <div class="row" style="position: relative; bottom: 0px; background-color: blueviolet;">
   <cards></cards>
-  </div>
+</div>-->
