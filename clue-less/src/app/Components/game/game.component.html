@@ -1,9 +1,17 @@
-<div *ngIf="!isLoggedIn"> <!--*ngIf means that this will only get rendered on the DOM if it is true.  Otherwise it won't even be present meaning it isn't hidden it just doesn't exist-->
-  <input type="text" #userName placeholder="Enter Username here..." /><button type="button" (click)="logIn(userName.value)" value="Submit" name="Submit">Submit</button>
+<div class="row">
+  <div class="col-sm-1">
+        <img class="img-responsive" src="{{characterImgPath.MissWhite}}" alt="Card image cap" style="width: 75%;">
+  </div>
+  <div class="col-sm-7">
+    <img class="img-responsive" src="{{boardPath}}" alt="Card image cap" style="height:75%;">
+  </div>
+  <div class="col-sm-1">
+    <img class="img-responsive" src="{{characterImgPath.ColMustard}}" alt="Card image cap" style="width: 75%;">
+  </div>
+  <div class="col-sm-3" style="background-color: chartreuse;">
+  <h3>Notepad</h3>
+  </div>
 </div>
-<div *ngIf="isLoggedIn">
-  <label>You are: {{message.userName}}</label>
-  <p-selectButton [options]="characters" [(ngModel)]="message.selectedCharacter"></p-selectButton>
-  <button type="button" (click)="sendMessage()" value="Submit" name="Submit">Select</button>
-</div>
-<div *ngFor="let message of messages">{{message.userName}} selected: {{message.selectedCharacter.name}}</div> <!--You don't use the qualifier of this. when in the template.  Just reference the properties directly by their name-->
+<div class="row" style="position: relative; bottom: 0px; background-color: blueviolet;">
+  <cards></cards>
+  </div>

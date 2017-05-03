@@ -12,7 +12,7 @@ import {SelectButtonModule, DialogModule, DataTableModule,SharedModule} from 'pr
 import { AppComponent } from './Components/app/app.component';
 import { ChatComponent } from './Components/chat/chat.component';
 import { GameComponent } from './Components/game/game.component';
-import { PlayingGameComponent } from './Components/playing-game/playing-game.component';
+import { CardsComponent } from './Components/cards/cards.component';
 import { NavComponent } from './Components/nav/nav.component';
 import { UserLoginComponent } from './Components/userLogin/userLogin.component';
 import { LobbyComponent } from './Components/lobby/lobby.component';
@@ -22,7 +22,7 @@ import { LobbyComponent } from './Components/lobby/lobby.component';
     AppComponent,
     ChatComponent,
     GameComponent,
-    PlayingGameComponent,
+    CardsComponent,
     NavComponent,
     LobbyComponent,
     UserLoginComponent //this lets the app know how to inject the chat component anywhere were <chat></chat> is in a template
