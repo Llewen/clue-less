@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'playing-game',
-  templateUrl: './playing-game.component.html',
-  styleUrls: ['./playing-game.component.css']
+  selector: 'cards',
+  templateUrl: './cards.component.html',
+  styleUrls: ['./cards.component.css']
 })
-export class PlayingGameComponent implements OnInit {
+export class CardsComponent implements OnInit {
 
   imageRoot;
   imagePaths;
