@@ -24,6 +24,7 @@ export class GameComponent implements OnInit {
   message: Game = new Game();  //This is saying that message is of type ChatMessage and instantiates a blank ChatMessage object
   messages = new Array<Game>();
   characters = [];
+  boardPath;
  //initialization of component for angular
   ngOnInit(){
     this.socket = io("http://localhost:3001/"); // will probably move out the url here to a new file so that it isn't hard-coded in every component
@@ -36,6 +37,7 @@ export class GameComponent implements OnInit {
     this.characters.push({label: "Ms. Peacock", value: new GameCharacter("Ms. Peacock")});
 
     this.socket.on('game message', (msg) => this.receiveMessage(msg));
+    this.boardPath = "../../../../assets/images/Board.png";
   }
 
   //functions
