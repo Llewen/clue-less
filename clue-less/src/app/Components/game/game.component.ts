@@ -1,17 +1,15 @@
 //this component is where the logic for the game will be held
 
 //angular
-import { Component, OnInit } from '@angular/core';
-
-//socket.io
-import * as io from 'socket.io-client'
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange } from '@angular/core';
 
 //other vendors
 import {SelectItem} from 'primeng/primeng';
 
 //custom classes
-import {Game} from "../../Classes/game.class";
-import {GameCharacter} from "../../Classes/gameCharacter.class";
+import {Lobby} from '../../../../../common/Classes/lobby.class';
+import {ServerUser} from '../../../../../common/Classes/serverUser.class';
+import {Game} from '../../../../../common/Classes/game.class';
 
 @Component({
   selector: 'game',
@@ -19,25 +17,43 @@ import {GameCharacter} from "../../Classes/gameCharacter.class";
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit {
-  socket;
-  isLoggedIn: boolean = false;
-  message: Game = new Game();  //This is saying that message is of type ChatMessage and instantiates a blank ChatMessage object
-  messages = new Array<Game>();
-  boardPath;
-  studyPath;
-  hallPath;
-  loungePath;
+  //private input properties
+  private _lobby: Lobby;
+  private _player: ServerUser;
+  private _socket;
+
+  //inputs
+  @Input() set lobby(lobby: Lobby){
+      this._lobby = lobby;
+  }
+  get lobby(): Lobby { return this._lobby; }
+
+  @Input() set player(player: ServerUser){
+      this._player = player;
+  }
+  get player(): ServerUser { return this._player; }
+
+  @Input() set socket(socket){
+      this._socket = socket;
+  }
+  get socket() { return this._socket; }
+
+  //outputs
+  //event outputs
+  @Output() registerStartGame = new EventEmitter<Lobby>();
+
+  //component specific properties
+  game: Game;
   characterImgPath;
   imageRoot;
-  
- //initialization of component for angular
+
+ //constructor, watchers
   ngOnInit(){
     this.imageRoot = "../../../../assets/images/";
-    this.boardPath = this.imageRoot + "Board.png";
-    this.studyPath = this.imageRoot + "Study.png";
-    this.hallPath = this.imageRoot + "Hall.png";
-    this.loungePath = this.imageRoot + "Lounge.png";
+    this.game = this.lobby.game;
 
+    //server messages
+    this.socket.on('game message', (msg) => this.updateGame(msg));
 
     this.characterImgPath = {
       ColMustard: this.imageRoot + "Colonel Mustard.png",
@@ -49,5 +65,24 @@ export class GameComponent implements OnInit {
     }
   }
 
+  ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
+  }
+
+  updateGame(game: Game)
+  {
+    this.game = game;
+  }
+  
+
   //functions
+  startGame(){
+    this.game.isStarted = true;
+    this.lobby.game = this.game;
+
+    //this is to register it with the lobby so new players cannot join
+    this.registerStartGame.emit(this.lobby);
+
+    //this is to alert the rest of the players in the game
+    this.socket.emit('game message', this.lobby.name, this.game);
+  }
 }

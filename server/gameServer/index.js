@@ -19,9 +19,10 @@ io.on('connection', function (socket) {
         console.log("chat message: " + JSON.stringify(msg));
         io.emit('chat message', msg);
     });
-    socket.on('game message', function (msg) {
-        console.log("game message: " + JSON.stringify(msg));
-        io.emit('game message', msg);
+    //releated to the game
+    socket.on('game message', function (id, msg) {
+        console.log("sending game message to: " + id.toString() + JSON.stringify(msg));
+        socket.broadcast.to(id).emit('game message', msg);
     });
     //related to lobbies
     socket.on('add lobby', function (msg) {
@@ -38,7 +39,7 @@ io.on('connection', function (socket) {
     });
     socket.on('update lobby', function (msg) {
         updateLobby(msg);
-        console.log("lobby now has: " + msg.players.length);
+        console.log("updating lobby: " + JSON.stringify(msg));
         socket.join(msg.name);
         socket.broadcast.emit('update lobby', msg);
     });
@@ -98,6 +99,7 @@ function updateLobby(lobby) {
     var index = lobbies.map(p => p.host.serverId).indexOf(lobby.host.serverId);
     if (index != -1) {
         lobbies[index].players = lobby.players;
+        lobbies[index].game = lobby.game;
     }
 }
 //# sourceMappingURL=index.js.map

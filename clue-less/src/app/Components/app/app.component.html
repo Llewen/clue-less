@@ -8,7 +8,7 @@
       <user-login [isValid]="isValidUserName" (addUser)="addUser($event)"></user-login>
     </div>
     <div *ngIf="route == 'game'" class="col-12">
-      <game></game>
+      <game [lobby]="lobby" [player]="player" [socket]="socket" (registerStartGame)="registerStartGame($event)"></game>
     </div>
 </div>
 
