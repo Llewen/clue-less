@@ -5,11 +5,11 @@
     <p-column field="host.user.userName" header="Host"></p-column>
     <p-column field="players.length" header="Players"></p-column>
       <ng-template let-count="rowData" pTemplate="body">
-        <span>{{count[col.field]}}/6</span>
+        <span>{{count[col.field]}}</span>
       </ng-template>
     <p-column>
       <ng-template let-lob="rowData" pTemplate="body">
-        <button *ngIf="isLoggedIn" type="button" (click)="joinLobby(lob)">Join</button>
+        <button *ngIf="isLoggedIn" type="button" (click)="joinSelectedLobby(lob)">Join</button>
         <span *ngIf="!isLoggedIn">Login to join game...</span>
       </ng-template>
     </p-column>

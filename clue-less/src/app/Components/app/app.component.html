@@ -2,7 +2,7 @@
 <div class="container appBody">
   <div class="row">
     <div *ngIf="route == 'lobby'" class="col-12">
-      <lobby [lobbyList]="lobbyList" [isValid]="isValidLobbyName" [isLoggedIn]="isLoggedIn" (addLobby)="addNewLobby($event)"></lobby>
+      <lobby [lobbyList]="lobbyList" [isValid]="isValidLobbyName" [isLoggedIn]="isLoggedIn" (addLobby)="addNewLobby($event)" (joinLobby)="joinLobby($event)"></lobby>
     </div>
     <div *ngIf="route == 'userLogin'" class="col-12">
       <user-login [isValid]="isValidUserName" (addUser)="addUser($event)"></user-login>

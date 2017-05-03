@@ -34,6 +34,11 @@ io.on('connection', function (socket) {
         console.log("remove lobby: " + JSON.stringify(msg.name));
         io.emit('remove lobby', msg);
     });
+    socket.on('update lobby', function (msg) {
+        updateLobby(msg);
+        console.log("lobby now has: " + msg.players.length);
+        socket.broadcast.emit('update lobby', msg);
+    });
     //related to users
     socket.on('add user', function (msg) {
         var newUser = new serverUser_class_1.ServerUser(socket.id, msg);
@@ -50,6 +55,7 @@ io.on('connection', function (socket) {
     //disonnect
     socket.on('disconnect', function () {
         removeUser(socket.id);
+        removeFromLobbyPlayers(socket.id);
         removeLobby(socket.id);
         io.emit("player list", players);
         io.emit("lobby list", lobbies);
@@ -69,6 +75,23 @@ function removeLobby(serverId) {
     var index = lobbies.map(p => p.host.serverId).indexOf(serverId);
     if (index != -1) {
         lobbies.splice(index, 1);
+    }
+}
+function removeFromLobbyPlayers(serverId) {
+    for (var x = 0; x < lobbies.length; x++) {
+        var lobby = lobbies[x];
+        var playerIndex = lobby.players.map(p => p.serverId).indexOf(serverId);
+        if (playerIndex != -1) {
+            lobby.players.splice(playerIndex, 1);
+            io.emit('update lobby', lobby);
+            break;
+        }
+    }
+}
+function updateLobby(lobby) {
+    var index = lobbies.map(p => p.host.serverId).indexOf(lobby.host.serverId);
+    if (index != -1) {
+        lobbies[index].players = lobby.players;
     }
 }
 //# sourceMappingURL=index.js.map

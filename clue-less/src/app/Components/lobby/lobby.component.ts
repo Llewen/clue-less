@@ -34,6 +34,7 @@ export class LobbyComponent {
     
     //event outputs
     @Output() addLobby = new EventEmitter<string>();
+    @Output() joinLobby = new EventEmitter<Lobby>();
 
     //component properties
     newLobbyName: string;
@@ -43,9 +44,9 @@ export class LobbyComponent {
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
     }
 
-    joinLobby(lobby: Lobby)
+    joinSelectedLobby(lobby: Lobby)
     {
-      console.log("wish to join: " + lobby.name);
+      this.joinLobby.emit(lobby);
     }
 
     createLobby()

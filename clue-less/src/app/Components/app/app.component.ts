@@ -52,6 +52,7 @@ export class AppComponent implements OnInit {
       //server messages around lobby list
       this.socket.on('remove lobby', (msg) => this.removeLobbyFromLobbyList(msg));
       this.socket.on('add lobby', (msg) => this.addLobbyToLobbyList(msg));
+      this.socket.on('update lobby', (msg) => this.updateLobbyInLobbyList(msg));
 
       this.route = "lobby"; 
     }
@@ -128,6 +129,7 @@ export class AppComponent implements OnInit {
      if(this.isValidLobbyName)
      {
         let newLobby = new Lobby(lobbyName, this.player);
+        newLobby.players.push(this.player);
         this.socket.emit('add lobby', newLobby)
         this.navigate("game");
      }
@@ -145,5 +147,21 @@ export class AppComponent implements OnInit {
    addLobbyToLobbyList(lobby: Lobby)
    {
       this.lobbyList.push(lobby);
+   }
+
+   joinLobby(lobby: Lobby)
+   {
+      lobby.players.push(this.player);
+      this.socket.emit('update lobby', lobby);
+      this.navigate("game");
+   }
+
+   updateLobbyInLobbyList(lobby: Lobby)
+   {
+     let existingLobbyIndex = this.lobbyList.map(p => p.host.serverId).indexOf(lobby.host.serverId);
+     if(existingLobbyIndex != -1)
+     {
+       this.lobbyList[existingLobbyIndex].players = lobby.players;
+     }
    }
 }
