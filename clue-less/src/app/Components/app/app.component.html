@@ -1,12 +1,15 @@
-<nav-menu [userName]="player.userName" [isLoggedIn]="isLoggedIn" (navigate)="navigate($event)" (logOut)="logOut()"></nav-menu>
+<nav-menu [userName]="player.user.userName" [isLoggedIn]="isLoggedIn" (navigate)="navigate($event)" (logOut)="logOut()"></nav-menu>
 <div class="container appBody">
   <div class="row">
     <div *ngIf="route == 'lobby'" class="col-12">
-      <lobby></lobby>
+      <lobby [lobbyList]="lobbyList" [isValid]="isValidLobbyName" [isLoggedIn]="isLoggedIn" (addLobby)="addNewLobby($event)"></lobby>
     </div>
     <div *ngIf="route == 'userLogin'" class="col-12">
       <user-login [isValid]="isValidUserName" (addUser)="addUser($event)"></user-login>
-  </div>
+    </div>
+    <div *ngIf="route == 'game'" class="col-12">
+      <game></game>
+    </div>
 </div>
 
 <!--<div class="container">

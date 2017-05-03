@@ -5,6 +5,8 @@ import { Component, OnInit } from '@angular/core';
 import * as io from 'socket.io-client'
 
 //custom classes
+import { ServerUser } from '../../../../../common/Classes/serverUser.class';
+import { Lobby } from '../../../../../common/Classes/lobby.class';
 import { Player } from '../../../../../common/Classes/player.class';
 
 
@@ -17,17 +19,21 @@ import { Player } from '../../../../../common/Classes/player.class';
 export class AppComponent implements OnInit {
    //server and shared properties
    socket;   
-   playerList: Array<Player> = new Array<Player>();
+   playerList: Array<ServerUser> = new Array<ServerUser>();
+   lobbyList: Array<Lobby> = new Array<Lobby>();
 
    //navMenu component properties
    isLoggedIn: boolean = false;
 
    //userLogin component properties
    isValidUserName: boolean = true;
+
+   //lobby component properties
+   isValidLobbyName: boolean = true;
    
    //local properties
    route: string;
-   player: Player = new Player("");
+   player: ServerUser = new ServerUser("", new Player(""));
    
 
    //constructors
@@ -36,10 +42,16 @@ export class AppComponent implements OnInit {
 
       //initial messages from server
       this.socket.on('player list', (msg) => this.initializePlayers(msg));
+      this.socket.on('lobby list', (msg) => this.initializeLobby(msg));
 
       //server messages around logged on users
       this.socket.on('remove user', (msg) => this.removeUserFromPlayerList(msg));
       this.socket.on('add user', (msg) => this.addUserToPlayerList(msg));
+      this.socket.on('register user', (msg) => { this.player.serverId = msg; });
+
+      //server messages around lobby list
+      this.socket.on('remove lobby', (msg) => this.removeLobbyFromLobbyList(msg));
+      this.socket.on('add lobby', (msg) => this.addLobbyToLobbyList(msg));
 
       this.route = "lobby"; 
     }
@@ -52,28 +64,24 @@ export class AppComponent implements OnInit {
    }
 
    //pertaining to initializing variables from server
-   initializePlayers(players: Array<Player>)
+   initializePlayers(players: Array<ServerUser>)
    {
      this.playerList = players;
    }
 
-   logOut()
+   initializeLobby(lobbies: Array<Lobby>)
    {
-     this.socket.emit('remove user', this.player);     
-     this.player = new Player("");
-     this.isLoggedIn = false;
-     this.navigate("lobby");
+     this.lobbyList = lobbies;
    }
-
 
 
    //pertaining to log-in, log-out of users
-   addUserToPlayerList(user: Player){
+   addUserToPlayerList(user: ServerUser){
       this.playerList.push(user);
    }
 
-   removeUserFromPlayerList(user: Player){
-      let existingPlayerIndex = this.playerList.map(p => p.userName).indexOf(user.userName);
+   removeUserFromPlayerList(user: ServerUser){
+      let existingPlayerIndex = this.playerList.map(p => p.user.userName).indexOf(user.user.userName);
       if(existingPlayerIndex != -1)
       {
         this.playerList.splice(existingPlayerIndex, 1);
@@ -82,7 +90,7 @@ export class AppComponent implements OnInit {
 
    addUser(userName: string){    
     this.isValidUserName = true;     
-    this.playerList.forEach((user) => 
+    this.playerList.map(x => x.user).forEach((user) => 
     {
       if(user.userName.toLowerCase() == userName.toLowerCase())
       {
@@ -92,10 +100,50 @@ export class AppComponent implements OnInit {
 
     if(this.isValidUserName)
     {
-      this.player.userName = userName;
-      this.socket.emit('add user', this.player);
+      this.player.user.userName = userName;
+      this.socket.emit('add user', this.player.user);
       this.isLoggedIn = true;
       this.navigate("lobby");
     }
+   }
+
+   logOut()
+   {
+     this.socket.emit('remove user', this.player);     
+     this.player = new ServerUser("", new Player(""));
+     this.isLoggedIn = false;
+     this.navigate("lobby");
+   }
+
+   //pertaining to lobby creation
+   addNewLobby(lobbyName: string){
+     this.isValidLobbyName = true;
+     this.lobbyList.forEach((lob) => {
+        if(lob.name.toLowerCase() == lobbyName.toLowerCase())
+        {
+          this.isValidLobbyName = false;
+        }
+     });
+
+     if(this.isValidLobbyName)
+     {
+        let newLobby = new Lobby(lobbyName, this.player);
+        this.socket.emit('add lobby', newLobby)
+        this.navigate("game");
+     }
+   }
+
+   removeLobbyFromLobbyList(lobby: Lobby)
+   {
+     let existingLobbyIndex = this.lobbyList.map(p => p.host.serverId).indexOf(lobby.host.serverId);
+     if(existingLobbyIndex != -1)
+     {
+       this.lobbyList.splice(existingLobbyIndex, 1);
+     }
+   }
+
+   addLobbyToLobbyList(lobby: Lobby)
+   {
+      this.lobbyList.push(lobby);
    }
 }
