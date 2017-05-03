@@ -1,8 +1,6 @@
-import { Game } from "./game.class";
-
 export class Player {
     userName: string;
-    game: Game;
+    character: string;
 
     constructor(userName: string)
     {

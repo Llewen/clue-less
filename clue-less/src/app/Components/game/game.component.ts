@@ -77,12 +77,24 @@ export class GameComponent implements OnInit {
   //functions
   startGame(){
     this.game.isStarted = true;
+    this.game.players = this.lobby.players;
+
     this.lobby.game = this.game;
 
     //this is to register it with the lobby so new players cannot join
     this.registerStartGame.emit(this.lobby);
 
     //this is to alert the rest of the players in the game
+    this.socket.emit('game message', this.lobby.name, this.game);
+  }
+
+  chooseCharacter(){
+    let playerIndex = this.game.players.map(p => p.serverId).indexOf(this.player.serverId);
+    if(playerIndex != -1)
+    {
+      this.game.players[playerIndex].user.character = this.player.user.character;
+    }
+
     this.socket.emit('game message', this.lobby.name, this.game);
   }
 }

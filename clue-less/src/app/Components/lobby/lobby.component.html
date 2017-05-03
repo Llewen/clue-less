@@ -10,6 +10,7 @@
     <p-column>
       <ng-template let-lob="rowData" pTemplate="body">
         <button *ngIf="isLoggedIn && !lob.game.isStarted" type="button" (click)="joinSelectedLobby(lob)">Join</button>
+        <span *ngIf="isLoggedIn && lob.game.isStarted">Game in session...</span>
         <span *ngIf="!isLoggedIn">Login to join game...</span>
       </ng-template>
     </p-column>
