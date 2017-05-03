@@ -71,7 +71,7 @@ io.on('connection', function(socket){
   //disonnect
   socket.on('disconnect', function(){
     removeUser(socket.id);
-    var lobbyName = removeFromLobbyPlayers(socket.id);
+    var lobbyName = removePlayersFromLobby(socket.id);
     if(lobbyName)
     {
       socket.leave(lobbyName);
@@ -106,7 +106,7 @@ function removeLobby(serverId)
     }
 }
 
-function removeFromLobbyPlayers(serverId)
+function removePlayersFromLobby(serverId)
 {
   for(var x = 0; x < lobbies.length; x++)
   {

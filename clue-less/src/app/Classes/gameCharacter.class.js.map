@@ -1,1 +1,1 @@
-{"version":3,"file":"gameCharacter.class.js","sourceRoot":"","sources":["gameCharacter.class.ts"],"names":[],"mappings":";;AAAA;IAII,YAAY,IAAY;QAEpB,IAAI,CAAC,IAAI,GAAG,IAAI,CAAC;IACrB,CAAC;CACJ;AARD,sCAQC"}
+{"version":3,"file":"gameCharacter.class.js","sourceRoot":"","sources":["gameCharacter.class.ts"],"names":[],"mappings":";;AAAA;IAKI,YAAY,IAAY,EAAE,OAAe;QAErC,IAAI,CAAC,IAAI,GAAG,IAAI,CAAC;QACjB,IAAI,CAAC,GAAG,GAAG,OAAO,CAAC;IACvB,CAAC;CACJ;AAVD,sCAUC"}
