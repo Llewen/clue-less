@@ -30,6 +30,11 @@ socket.on('game message', function(id, msg){
   socket.broadcast.to(id).emit('game message', msg);
 });
 
+socket.on('player select', function(id, msg){
+  console.log("player: " + msg.user.userName + " chose character: " + msg.user.character);
+  socket.broadcast.to(id).emit('player select', msg);
+});
+
 
 //related to lobbies
   socket.on('add lobby', function(msg){

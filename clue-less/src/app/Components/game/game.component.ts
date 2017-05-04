@@ -48,6 +48,7 @@ export class GameComponent implements OnInit {
   imageRoot;
   isValidCharacterSelection: boolean = true;
   closeCharacterDialog: boolean = false;
+  allPlayersHaveChosen: boolean = false;
 
  //constructor, watchers
   ngOnInit(){
@@ -56,6 +57,7 @@ export class GameComponent implements OnInit {
 
     //server messages
     this.socket.on('game message', (msg) => this.updateGame(msg));
+    this.socket.on('player select', (msg) => this.selectPlayer(msg));
 
     this.characterImgPath = {
       ColMustard: this.imageRoot + "Colonel Mustard.png",
@@ -73,6 +75,15 @@ export class GameComponent implements OnInit {
   updateGame(game: Game)
   {
     this.game = game;
+  }
+
+  selectPlayer(player: ServerUser)
+  {
+    let playerIndex = this.game.players.map(p => p.serverId).indexOf(player.serverId);
+
+    this.game.players[playerIndex].user.character = player.user.character;
+
+    this.checkIfAllHaveChosen();
   }
   
 
@@ -105,7 +116,20 @@ export class GameComponent implements OnInit {
       }
 
       this.closeCharacterDialog = true;
-      this.socket.emit('game message', this.lobby.name, this.game);
+      this.checkIfAllHaveChosen();
+      this.socket.emit('player select', this.lobby.name, this.player);
     }
+  }
+
+  checkIfAllHaveChosen(){
+    let allChosen = true;
+    this.game.players.forEach((p) => {
+      if(!p.user.character || p.user.character == "")
+      {
+        allChosen = false;
+      }
+    });
+
+    this.allPlayersHaveChosen = allChosen;
   }
 }
