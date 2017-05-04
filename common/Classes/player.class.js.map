@@ -1,1 +1,1 @@
-{"version":3,"file":"player.class.js","sourceRoot":"","sources":["player.class.ts"],"names":[],"mappings":";;AAAA;IAMI,YAAY,QAAgB,EAAE,KAAa;QAEvC,IAAI,CAAC,QAAQ,GAAG,QAAQ,CAAC;QACzB,IAAI,CAAC,KAAK,GAAG,KAAK,CAAC;IACvB,CAAC;CACJ;AAXD,wBAWC"}
+{"version":3,"file":"player.class.js","sourceRoot":"","sources":["player.class.ts"],"names":[],"mappings":";;AAEA;IAOI,YAAY,QAAgB,EAAE,KAAa;QAEvC,IAAI,CAAC,QAAQ,GAAG,QAAQ,CAAC;QACzB,IAAI,CAAC,KAAK,GAAG,KAAK,CAAC;QACnB,IAAI,CAAC,KAAK,GAAG,IAAI,KAAK,EAAQ,CAAC;IACnC,CAAC;CACJ;AAbD,wBAaC"}

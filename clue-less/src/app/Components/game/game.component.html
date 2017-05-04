@@ -23,28 +23,45 @@
   </p-footer>
 </p-dialog>
 
+<p-dialog header="Make Suggestion" [width]="500" [height]="auto" [closable]="false" [visible]="showSuggestionDialog">
+  <label>Character: </label><p-dropdown [options]="suggestionCharacterDD" [(ngModel)]="suggestion.character" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown
+  <label>Weapon: </label><p-dropdown [options]="suggestionWeaponDD" [(ngModel)]="suggestion.weapon" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown>  
+  <p-footer>
+      <button type="button" class="pull-right" aria-label="Suggest" (click)="makeSuggestion()">Suggest</button>
+      <span *ngIf="!isValidSuggestion">Make sure to select a value for each dropdown</span>
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="Make Accusation" [width]="500" [height]="auto" [closable]="false" [visible]="showAccusationDialog">
+  <label>Character: </label><p-dropdown [options]="suggestionCharacterDD" [(ngModel)]="suggestion.character" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown>
+  <label>Room: </label><p-dropdown [options]="accusationRoomDD" [(ngModel)]="suggestion.room" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown>
+  <label>Weapon: </label><p-dropdown [options]="suggestionWeaponDD" [(ngModel)]="suggestion.weapon" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown>  
+  <p-footer>
+      <button type="button" class="pull-right" aria-label="Suggest" (click)="makeAccusation()">Accuse</button>
+      <span *ngIf="!isValidAccusation">Make sure to select a value for each dropdown</span>
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="Suggestion Reply" [width]="500" [height]="auto" [closable]="false" [visible]="showSuggestionReplyDialog">
+  <label>Card: </label><p-dropdown [options]="suggestionReplyDD" [(ngModel)]="suggestionReply.card" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown>
+  <p-footer>
+      <button type="button" class="pull-right" aria-label="Reply" (click)="sendSuggestionReply()">Reply</button>
+      <span *ngIf="!isValidSuggestionReply">Make sure to select a value for the dropdown</span>
+  </p-footer>
+</p-dialog>
+
 <!--Button Row-->
 <!--For some reason, can't get the buttons centered, whatever it's fine haha-->
 <div *ngIf="player.user.isTurn" class="btn-toolbar" style="width:700px; border: 2px solid purple;"> 
   <div class="dropdown" style="padding:5px;">
-      <button class="btn btn-secondary btn-m dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-secondary btn-m" (click)="showSuggDialog()" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Make Suggestion
       </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="#">Action</a>
-        <a class="dropdown-item" href="#">Another action</a>
-        <a class="dropdown-item" href="#">Something else here</a>
-      </div>
   </div>
     <div class="dropdown" style="padding:5px;">
-      <button class="btn btn-secondary btn-m dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-secondary btn-m" (click)="showAccuseDialog()" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Make Accusation
       </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="#">Action</a>
-        <a class="dropdown-item" href="#">Another action</a>
-        <a class="dropdown-item" href="#">Something else here</a>
-      </div>
   </div>
   <div style="margin: 5px;">
     <button type="button" class="btn btn-danger btn-xs active" (click)="endTurn()">End Turn</button>

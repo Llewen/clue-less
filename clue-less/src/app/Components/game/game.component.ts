@@ -12,6 +12,8 @@ import {ServerUser} from '../../../../../common/Classes/serverUser.class';
 import {Game} from '../../../../../common/Classes/game.class';
 import {Player} from '../../../../../common/Classes/player.class';
 import {Room} from '../../../../../common/Classes/room.class';
+import {Suggestion} from '../../Classes/suggestion.class';
+import {SuggestionReply} from '../../Classes/suggestionReply.class';
 
 @Component({
   selector: 'game',
@@ -50,8 +52,19 @@ export class GameComponent implements OnInit {
   closeCharacterDialog: boolean = false;
   allPlayersHaveChosen: boolean = false;
   hasMoved: boolean = false;
+  showSuggestionDialog: boolean = false;
+  showSuggestionReplyDialog: boolean = false;
+  showAccusationDialog: boolean = false;
+  isValidSuggestion: boolean = true;
+  isValidSuggestionReply: boolean = true;
+  isValidAccusation: boolean = true;
+  suggestion: Suggestion = new Suggestion();
+  suggestionReply: SuggestionReply = new SuggestionReply();
+  makingSuggestion: boolean = false;
   logMessages: Array<string>;
   chosenCharacter = {"character": "", "color": ""};
+
+  //drop downs
   characterSelectionDropdown = [{label:'Select Character', value: null},
                                 {label:'Miss Scarlet', value: {"character": 'Miss Scarlet', "color": 'red'}},
                                 {label:'Colonel Mustard', value: {"character": 'Colonel Mustard', "color": 'yellow'}},
@@ -59,6 +72,34 @@ export class GameComponent implements OnInit {
                                 {label:'Mr. Green', value: {"character": 'Mr. Green', "color": 'green'}},
                                 {label:'Mrs. Peacock', value: {"character": 'Mrs. Peacock', "color": 'blue'}},
                                 {label:'Professor Plum', value: {"character": 'Professor Plum', "color": 'purple'}}];
+
+suggestionCharacterDD = [{label:'Select Character', value: null},
+                        {label:'Miss Scarlet', value: 'Miss Scarlet'},
+                        {label:'Colonel Mustard', value: 'Colonel Mustard'},
+                        {label:'Mrs. White', value: 'Mrs. White'},
+                        {label:'Mr. Green', value: 'Mr. Green'},
+                        {label:'Mrs. Peacock', value: 'Mrs. Peacock'},
+                        {label:'Professor Plum', value: 'Professor Plum'}];
+
+accusationRoomDD =     [{label:'Select Room', value: null},
+                        {label:'Study', value: 'Study'},
+                        {label:'Hall', value: 'Hall'},
+                        {label:'Lounge', value: 'Lounge'},
+                        {label:'Billiard Room', value: 'Billiard Room'},
+                        {label:'Dining Room', value: 'Dining Room'},
+                        {label:'Conservatory', value: 'Conservatory'},
+                        {label:'Ball Room', value: 'Ball Room'},
+                        {label:'Kitchen', value: 'Kitchen'}];                            
+
+suggestionWeaponDD = [{label:'Select Room', value: null},
+                        {label:'Rope', value: 'Rope'},
+                        {label:'Lead Pipe', value: 'Lead Pipe'},
+                        {label:'Knife', value: 'Knife'},
+                        {label:'Wrench', value: 'Wrench'},
+                        {label:'Candlestick', value: 'Candlestick'},
+                        {label:'Revolver', value: 'Revolver'}];  
+
+suggestionReplyDD = [{label:'Select Room', value: null}];
 
  //constructor, watchers
   ngOnInit(){
@@ -68,7 +109,9 @@ export class GameComponent implements OnInit {
     //server messages
     this.socket.on('game message', (msg) => this.updateGame(msg));
     this.socket.on('player select', (msg) => this.selectPlayer(msg));
-    this.socket.on('move message', (msg) => this.addToLog(msg));
+    this.socket.on('log message', (msg) => this.addToLog(msg));
+    this.socket.on('make suggestion', (msg) => this.handleSuggestion(msg));
+    this.socket.on('suggestion reply', (msg) => this.handleSuggestionReply(msg));
   }
 
   ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
@@ -253,7 +296,7 @@ export class GameComponent implements OnInit {
           currentRoom.players.splice(currentRoomPlayerIndex, 1);
           movingTo.players.push(this.player);
           this.hasMoved = true;
-          this.socket.emit('move message', this.lobby.name, this.player.user.character + " moved to " + movingTo.name);
+          this.socket.emit('log message', this.lobby.name, this.player.user.character + " moved to " + movingTo.name);
           this.socket.emit('game message', this.lobby.name, this.game);
         }
         else{
@@ -353,9 +396,144 @@ export class GameComponent implements OnInit {
   }
 
 
-addToLog(msg: string)
-{
-  this.logMessages.push(msg);
-}
+  addToLog(msg: string)
+  {
+    this.logMessages.push(msg);
+  }
 
+  makeSuggestion()
+  {
+    let containRoom = this.findContainingRoom();
+
+    if(containRoom.name.indexOf("Hallway") == -1)
+    {
+      if(this.suggestion.character && this.suggestion.weapon)
+      {
+        this.suggestion.room = containRoom.name; //you can only make suggestion for room that you are in
+        this.isValidSuggestion = true;
+        this.makingSuggestion = true;
+        this.setWhoIsNextForSuggestion(this.game.turnIndex + 1);
+        if(this.suggestion.to == this.player.serverId)
+        {
+          this.makingSuggestion = false;
+          //display some sort of message to user here saying that the suggestion could not be disproved.
+        }
+        else
+        {
+          this.suggestion.from = this.player.serverId;
+          this.socket.emit('log message', this.lobby.name, this.player.user.character + " made the following suggestion. Character: " + this.suggestion.character + " Room: " + this.suggestion.room + " Weapon: " + this.suggestion.weapon);
+          this.socket.emit('make suggestion', this.suggestion);
+        }
+      }
+      else{
+        this.isValidSuggestion = false;
+      }
+    }
+    else
+    {
+      alert("You must be in a room to make a suggestion");
+    }
+  }
+
+  setWhoIsNextForSuggestion(turnIndex: number)
+  {
+      let currentCharacterTurn = this.game.turnOrder[turnIndex];
+
+      let playerIndex = this.game.players.map(p => p.user.character).indexOf(currentCharacterTurn);
+      if(playerIndex != -1)
+      {
+        this.suggestion.to = this.game.players[playerIndex].serverId;
+        this.suggestion.turnIndexOfReplyingPlayer = turnIndex;
+      }
+      else{
+        let nextTurn = 0;
+        if(turnIndex == 5)
+        {
+          nextTurn = 0;
+        }
+        else
+        {
+          nextTurn = turnIndex += 1;
+        }
+        this.setWhoIsNextForSuggestion(nextTurn);
+      }
+  }
+
+  handleSuggestionReply(reply: SuggestionReply)
+  {
+    if(reply.canDisprove)
+    {
+      //display the card that is contained in reply.card
+      this.suggestion = new Suggestion();
+    }
+    else{
+      this.setWhoIsNextForSuggestion(this.suggestion.turnIndexOfReplyingPlayer + 1);
+      if(this.suggestion.to == this.player.serverId)
+      {
+        this.makingSuggestion = false;
+        this.suggestion = new Suggestion();
+        //again display some sort of message to user saying that the suggestion could not be disproved
+      }
+      else
+      {
+        this.socket.emit('make suggestion', this.lobby.name, this.suggestion);        
+      }
+    }
+  }
+
+  handleSuggestion(suggestion: Suggestion)
+  {
+    //build out card dropdown for user to respond with
+    this.player.user.cards.forEach((card) => {
+      if(card.value == suggestion.character || card.value == suggestion.room || card. value == suggestion.weapon)
+      {
+        this.suggestionReplyDD.push({label:card.value, value: card});
+      }
+    });
+
+    if(this.suggestionReplyDD.length > 1)
+    {
+      this.showSuggestionReplyDialog = true;      
+    }
+    else
+    {
+      //auto reply with false for being able to disprove
+        this.socket.emit('log message', this.lobby.name, this.player.user.character + " was unable to disprove the suggestion.");      
+      this.socket.emit('suggestion reply', new SuggestionReply(false));
+    }
+  }
+
+  sendSuggestionReply()
+  {
+    if(this.suggestionReply.card)
+    {
+      this.isValidSuggestionReply = true;
+      this.showSuggestionReplyDialog = false;
+      this.suggestionReplyDD = [{label:'Select Room', value: null}];
+      this.suggestionReply.canDisprove = true;
+      this.socket.emit('log message', this.lobby.name, this.player.user.character + " was able to disprove the suggestion.");            
+      this.socket.emit('suggestion reply', this.suggestionReply);
+      this.suggestionReply = new SuggestionReply();
+    }
+    else{
+      this.isValidSuggestionReply = false;
+    }
+  }
+
+  showSuggDialog()
+  {
+    this.showSuggestionDialog = true;
+  }
+
+  showAccuseDialog()
+  {
+    //this dialog is not currently hooked up
+    this.showAccusationDialog = true;
+  }
+
+  makeAccusation()
+  {
+    //just check with the games case file and then modify cards if loss or display victory: WHO to all if win
+    //use this.socket.emit('game message', this.lobby.name, this.game); to update players
+  }
 }

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class Room {
+class Card {
 }
-exports.Room = Room;
-//# sourceMappingURL=room.class.js.map
+exports.Card = Card;
+//# sourceMappingURL=card.class.js.map

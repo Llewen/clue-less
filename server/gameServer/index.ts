@@ -35,9 +35,19 @@ socket.on('player select', function(id, msg){
   socket.broadcast.to(id).emit('player select', msg);
 });
 
-socket.on('move message', function(id, msg){
+socket.on('log message', function(id, msg){
   console.log(msg);
-  io.to(id).emit('move message', msg);
+  io.to(id).emit('log message', msg);
+});
+
+socket.on('make suggestion', function(msg){
+  console.log("suggestion consists of: " + JSON.stringify(msg));
+  socket.broadcast.to(msg.to).emit('make suggestion', msg);
+});
+
+socket.on('suggestion reply', function(msg){
+  console.log("suggestion reply: " + JSON.stringify(msg));
+  socket.broadcast.to(msg.from).emit("suggestion reply", msg);
 });
 
 
