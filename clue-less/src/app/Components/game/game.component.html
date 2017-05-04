@@ -6,14 +6,15 @@
   </div>
 </div>
 
-<p-dialog header="Create Lobby" [closable]="false" [visible]="game.isStarted">
+<p-dialog header="Create Lobby" [closable]="false" [visible]="game.isStarted && !closeCharacterDialog">
   <div *ngFor="let serverUser of game.players">
     <span *ngIf="serverUser.user.character && serverUser.user.character != ''">{{serverUser.user.userName}} chooses: {{serverUser.user.character}}</span>
   </div>
-  <input type="text" [(ngModel)]="player.character" placeholder="type character because I am lazy and don't want to create a dropdown'">
+  <span>"Miss Scarlet", "Colonel Mustard", "Mrs. White", "Mr. Green", "Ms. Peacock", "Professor Plum"</span>
+  <input type="text" [(ngModel)]="player.user.character" placeholder="type character because I am lazy and don't want to create a dropdown'">
   <p-footer>
       <button type="button" class="pull-right" aria-label="Create" (click)="chooseCharacter()">Choose</button>
-      <span *ngIf="!isValid">Character is already taken. Please choose a different character</span>
+      <span *ngIf="!isValidCharacterSelection">Character is already taken. Please choose a different character</span>
   </p-footer>
 </p-dialog>
 

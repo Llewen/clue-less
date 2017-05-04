@@ -46,6 +46,8 @@ export class GameComponent implements OnInit {
   game: Game;
   characterImgPath;
   imageRoot;
+  isValidCharacterSelection: boolean = true;
+  closeCharacterDialog: boolean = false;
 
  //constructor, watchers
   ngOnInit(){
@@ -89,12 +91,21 @@ export class GameComponent implements OnInit {
   }
 
   chooseCharacter(){
-    let playerIndex = this.game.players.map(p => p.serverId).indexOf(this.player.serverId);
-    if(playerIndex != -1)
+    let alreadyChosenIndex = this.game.players.map(p => p.user.character).indexOf(this.player.user.character);
+    if(alreadyChosenIndex != -1)
     {
-      this.game.players[playerIndex].user.character = this.player.user.character;
+      this.isValidCharacterSelection = false;
     }
+    else
+    {
+      let playerIndex = this.game.players.map(p => p.serverId).indexOf(this.player.serverId);
+      if(playerIndex != -1)
+      {
+        this.game.players[playerIndex].user.character = this.player.user.character;
+      }
 
-    this.socket.emit('game message', this.lobby.name, this.game);
+      this.closeCharacterDialog = true;
+      this.socket.emit('game message', this.lobby.name, this.game);
+    }
   }
 }
