@@ -24,7 +24,7 @@
 </p-dialog>
 
 <p-dialog header="Make Suggestion" [width]="500" [height]="auto" [closable]="false" [visible]="showSuggestionDialog">
-  <label>Character: </label><p-dropdown [options]="suggestionCharacterDD" [(ngModel)]="suggestion.character" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown
+  <label>Character: </label><p-dropdown [options]="suggestionCharacterDD" [(ngModel)]="suggestion.character" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown>
   <label>Weapon: </label><p-dropdown [options]="suggestionWeaponDD" [(ngModel)]="suggestion.weapon" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown>  
   <p-footer>
       <button type="button" class="pull-right" aria-label="Suggest" (click)="makeSuggestion()">Suggest</button>
