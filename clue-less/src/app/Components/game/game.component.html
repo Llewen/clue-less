@@ -24,7 +24,36 @@
   </p-footer>
 </p-dialog>
 
-<div style="width:900px;" class="pull-left">
+<!--Button Row-->
+<!--For some reason, can't get the buttons centered, whatever it's fine haha-->
+<div class="btn-toolbar" style="width:700px; border: 2px solid purple;"> 
+  <div class="dropdown" style="padding:5px;">
+      <button class="btn btn-secondary btn-m dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Make Suggestion
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#">Action</a>
+        <a class="dropdown-item" href="#">Another action</a>
+        <a class="dropdown-item" href="#">Something else here</a>
+      </div>
+  </div>
+    <div class="dropdown" style="padding:5px;">
+      <button class="btn btn-secondary btn-m dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Make Accusation
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#">Action</a>
+        <a class="dropdown-item" href="#">Another action</a>
+        <a class="dropdown-item" href="#">Something else here</a>
+      </div>
+  </div>
+  <div style="margin: 5px;">
+    <button type="button" class="btn btn-danger btn-xs active">End Turn</button>
+  </div>
+</div>
+
+<!--Board-->
+<div style="width:650px; border: 2px solid black" class="pull-left">
   <div style="width:100%;">
     <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>Study</a></div>
     <div style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table"><a></a></div>
@@ -56,6 +85,78 @@
     <div style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table"><a></a></div>
     <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>Kitchen</a></div>
   </div>
+  <!--Bottom section-->
+  <div style="position:absolute; bottom:0; height:200px; width:650px; border: 1px solid black; margin-top: 50px;">
+    
+    <!--Cards-->
+    <div style="float:left; width:50%;">
+      <h6>Cards:</h6>
+      <ul class="list-group">
+        <li class="list-group-item" style="height: 30px; padding: 5px 15px;">Room: Whatever</li>
+        <li class="list-group-item" style="height: 30px; padding: 5px 15px;">Weapon: Scary</li>
+        <li class="list-group-item" style="height: 30px; padding: 5px 15px;">Character: Weirdo</li>
+        <li class="list-group-item" style="height: 30px; padding: 5px 15px;">...</li>
+        <li class="list-group-item" style="height: 30px; padding: 5px 15px;">...</li>
+        <li class="list-group-item" style="height: 30px; padding: 5px 15px;">...</li>
+      </ul>
+    </div>
+
+    <!--Logger-->
+    <div style="float:right; width: 50%; height:100%; border: 5px solid red;">
+      <h6>Logger</h6>
+    </div>
+  </div>
+</div>
+
+<!--Notepad-->
+<div class="pull-right" style="width:300px; position:relative; border:2px solid orange;" >
+    <h3>Notepad</h3>
+    <hr>
+    <form>
+      <fieldset>
+        <legend>Characters:</legend>
+            <label class="checkbox">
+              <input type="checkbox" name="missWhite" value="missWhite"> Miss White<br>
+              <input type="checkbox" name="colonelMustard" value="colonelMustard"> Colonel Mustard<br>
+              <input type="checkbox" name="mrGreen" value="mrGreen"> Mr Green<br>
+              <input type="checkbox" name="mrsPeacock" value="mrsPeacock"> Mrs Peacock<br>
+              <input type="checkbox" name="professorPlum" value="professorPlum"> Professor Plum<br>
+              <input type="checkbox" name="missScarlet" value="missScarlet"> Miss Scarlet<br>
+            </label><br>
+        </fieldset>
+    </form>
+      <hr>
+    <form>
+      <fieldset>
+        <legend>Rooms:</legend>
+            <label class="checkbox">
+              <input type="checkbox" name="study" value="study"> Study<br>
+              <input type="checkbox" name="hall" value="hall"> Hall<br>
+              <input type="checkbox" name="lounge" value="lounge"> Lounge<br>
+              <input type="checkbox" name="library" value="library"> Library<br>
+              <input type="checkbox" name="billiardRoom" value="billiardRoom"> Billiard Room<br>
+              <input type="checkbox" name="dinningRoom" value="dinningRoom"> Dinning Room<br>
+              <input type="checkbox" name="conservatory" value="conservatory"> Conservatory<br>
+              <input type="checkbox" name="ballRoom" value="ballRoom"> Ball Room<br>
+              <input type="checkbox" name="kitchen" value="kitchen"> Kitchen<br>
+
+            </label><br>
+        </fieldset>
+    </form>
+      <hr>
+    <form>
+      <fieldset>
+        <legend>Weapons:</legend>
+            <label class="checkbox">
+              <input type="checkbox" name="wrench" value="wrench"> Wrench<br>
+              <input type="checkbox" name="candlestick" value="candlestick"> Candlestick<br>
+              <input type="checkbox" name="leadPipe" value="leadPipe"> Lead Pipe<br>
+              <input type="checkbox" name="rope" value="rope"> Rope<br>
+              <input type="checkbox" name="revolver" value="revolver"> Revolver<br>
+              <input type="checkbox" name="knife" value="knife"> Knife<br>
+            </label><br>
+        </fieldset>
+    </form>
 </div>
 
 
@@ -73,56 +174,6 @@
   </div>
   <div class="col-sm-3" border ="1">
       <h3>Notepad</h3>
-      <hr>
-      <form>
-        <fieldset>
-          <legend>Characters:</legend>
-              <label class="checkbox">
-                <input type="checkbox" name="missWhite" value="missWhite"> Miss White<br>
-                <input type="checkbox" name="colonelMustard" value="colonelMustard"> Colonel Mustard<br>
-                <input type="checkbox" name="mrGreen" value="mrGreen"> Mr Green<br>
-                <input type="checkbox" name="mrsPeacock" value="mrsPeacock"> Mrs Peacock<br>
-                <input type="checkbox" name="professorPlum" value="professorPlum"> Professor Plum<br>
-                <input type="checkbox" name="missScarlet" value="missScarlet"> Miss Scarlet<br>
-              </label><br>
-         </fieldset>
-      </form>
-
-       <hr>
-
-      <form>
-        <fieldset>
-          <legend>Rooms:</legend>
-              <label class="checkbox">
-                <input type="checkbox" name="study" value="study"> Study<br>
-                <input type="checkbox" name="hall" value="hall"> Hall<br>
-                <input type="checkbox" name="lounge" value="lounge"> Lounge<br>
-                <input type="checkbox" name="library" value="library"> Library<br>
-                <input type="checkbox" name="billiardRoom" value="billiardRoom"> Billiard Room<br>
-                <input type="checkbox" name="dinningRoom" value="dinningRoom"> Dinning Room<br>
-                <input type="checkbox" name="conservatory" value="conservatory"> Conservatory<br>
-                <input type="checkbox" name="ballRoom" value="ballRoom"> Ball Room<br>
-                <input type="checkbox" name="kitchen" value="kitchen"> Kitchen<br>
-
-              </label><br>
-         </fieldset>
-      </form>
-
-       <hr>
-
-      <form>
-        <fieldset>
-          <legend>Weapons:</legend>
-              <label class="checkbox">
-                <input type="checkbox" name="wrench" value="wrench"> Wrench<br>
-                <input type="checkbox" name="candlestick" value="candlestick"> Candlestick<br>
-                <input type="checkbox" name="leadPipe" value="leadPipe"> Lead Pipe<br>
-                <input type="checkbox" name="rope" value="rope"> Rope<br>
-                <input type="checkbox" name="revolver" value="revolver"> Revolver<br>
-                <input type="checkbox" name="knife" value="knife"> Knife<br>
-              </label><br>
-         </fieldset>
-      </form>
 </div>
 <div class="row" style="position: relative; bottom: 0px; background-color: blueviolet;">
   <cards></cards>
