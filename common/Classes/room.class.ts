@@ -4,8 +4,9 @@ export class Room{
     name: string;
     players: Array<ServerUser>;
     capacity: number;
+    neighbors: Array<string>;
 
-    constructor(name: string, capacity?: number)
+    constructor(name: string, capacity?: number, neighbors?: Array<string>)
     {
         this.name = name;
         if(capacity)
@@ -17,6 +18,10 @@ export class Room{
         }
 
         this.players = new Array<ServerUser>();
+        if(neighbors)
+        {
+            this.neighbors = neighbors;
+        }
     }
 
 }

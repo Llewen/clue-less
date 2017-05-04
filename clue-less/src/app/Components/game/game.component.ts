@@ -11,6 +11,7 @@ import {Lobby} from '../../../../../common/Classes/lobby.class';
 import {ServerUser} from '../../../../../common/Classes/serverUser.class';
 import {Game} from '../../../../../common/Classes/game.class';
 import {Player} from '../../../../../common/Classes/player.class';
+import {Room} from '../../../../../common/Classes/room.class';
 
 @Component({
   selector: 'game',
@@ -48,6 +49,8 @@ export class GameComponent implements OnInit {
   isValidCharacterSelection: boolean = true;
   closeCharacterDialog: boolean = false;
   allPlayersHaveChosen: boolean = false;
+  hasMoved: boolean = false;
+  logMessages: Array<string>;
   chosenCharacter = {"character": "", "color": ""};
   characterSelectionDropdown = [{label:'Select Character', value: null},
                                 {label:'Miss Scarlet', value: {"character": 'Miss Scarlet', "color": 'red'}},
@@ -60,10 +63,12 @@ export class GameComponent implements OnInit {
  //constructor, watchers
   ngOnInit(){
     this.game = this.lobby.game;
+    this.logMessages = new Array<string>();
 
     //server messages
     this.socket.on('game message', (msg) => this.updateGame(msg));
     this.socket.on('player select', (msg) => this.selectPlayer(msg));
+    this.socket.on('move message', (msg) => this.addToLog(msg));
   }
 
   ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
@@ -175,17 +180,25 @@ export class GameComponent implements OnInit {
 
   endTurn()
   {
-    if(this.game.turnIndex == 5)
+    if(this.hasMoved)
     {
-      this.game.turnIndex = 0;
-    }
-    else{
-      this.game.turnIndex += 1;
-    }
+      if(this.game.turnIndex == 5)
+      {
+        this.game.turnIndex = 0;
+      }
+      else{
+        this.game.turnIndex += 1;
+      }
 
-    this.player.user.isTurn = false;
-    this.setTurn();
-    this.socket.emit('game message', this.lobby.name, this.game);
+      this.player.user.isTurn = false;
+      this.hasMoved = false;
+      this.setTurn();
+      this.socket.emit('game message', this.lobby.name, this.game);
+    }
+    else
+    {
+      alert("You must move before ending your turn");
+    }
   }
 
   setInitialPositions()
@@ -227,5 +240,122 @@ export class GameComponent implements OnInit {
     
   }
 
+  moveIfValid(movingTo: Room)
+  {
+    if(this.player.user.isTurn && !this.hasMoved)
+    {
+      var currentRoom = this.findContainingRoom();
+      if(currentRoom.neighbors.indexOf(movingTo.name) != -1)
+      {
+        if(movingTo.players.length < movingTo.capacity)
+        {
+          let currentRoomPlayerIndex = currentRoom.players.map(p => p.serverId).indexOf(this.player.serverId);
+          currentRoom.players.splice(currentRoomPlayerIndex, 1);
+          movingTo.players.push(this.player);
+          this.hasMoved = true;
+          this.socket.emit('move message', this.lobby.name, this.player.user.character + " moved to " + movingTo.name);
+          this.socket.emit('game message', this.lobby.name, this.game);
+        }
+        else{
+          alert("Only 1 player may occupy a hallway at a time.");
+        }
+      }
+    }
+  }
+
+  //this function is disgusting.  Avert your gaze!
+  findContainingRoom()
+  {
+    if(this.game.Study.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Study;
+    }
+    else if(this.game.Hallway1.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Hallway1;
+    }
+    else if(this.game.Hall.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Hall;
+    }
+    else if(this.game.Hallway2.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Hallway2;
+    }
+    else if(this.game.Lounge.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Lounge;
+    }
+    else if(this.game.Hallway3.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Hallway3;
+    }
+    else if(this.game.Hallway4.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Hallway4;
+    }
+    else if(this.game.Hallway5.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Hallway5;
+    }
+    else if(this.game.Library.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Library;
+    }
+    else if(this.game.Hallway6.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Hallway6;
+    }
+    else if(this.game.BilliardRoom.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.BilliardRoom;
+    }
+    else if(this.game.Hallway7.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Hallway7;
+    }
+    else if(this.game.DiningRoom.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.DiningRoom;
+    }
+    else if(this.game.Hallway8.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Hallway8;
+    }
+    else if(this.game.Hallway9.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Hallway9;
+    }
+    else if(this.game.Hallway10.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Hallway10;
+    }
+    else if(this.game.Conservatory.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Conservatory;
+    }
+    else if(this.game.Hallway11.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Hallway11;
+    }
+    else if(this.game.BallRoom.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.BallRoom;
+    }
+    else if(this.game.Hallway12.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Hallway12;
+    }
+    else if(this.game.Kitchen.players.map(p => p.serverId).indexOf(this.player.serverId) != -1)
+    {
+      return this.game.Kitchen;
+    }
+  }
+
+
+addToLog(msg: string)
+{
+  this.logMessages.push(msg);
+}
 
 }

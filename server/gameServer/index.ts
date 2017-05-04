@@ -35,6 +35,11 @@ socket.on('player select', function(id, msg){
   socket.broadcast.to(id).emit('player select', msg);
 });
 
+socket.on('move message', function(id, msg){
+  console.log(msg);
+  io.to(id).emit('move message', msg);
+});
+
 
 //related to lobbies
   socket.on('add lobby', function(msg){

@@ -47,14 +47,14 @@
       </div>
   </div>
   <div style="margin: 5px;">
-    <button type="button" class="btn btn-danger btn-xs active">End Turn</button>
+    <button type="button" class="btn btn-danger btn-xs active" (click)="endTurn()">End Turn</button>
   </div>
 </div>
 
 <!--Board-->
 <div style="width:650px; border: 2px solid black" class="pull-left">
   <div style="width:100%;">
-    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.Study.name}}</a>
+    <div class="room" (click)="moveIfValid(game.Study)" style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.Study.name}}</a>
       <table>
         <tr>
           <td *ngIf="game.Study.players && game.Study.players.length > 0">
@@ -80,10 +80,10 @@
         </tr>
       </table>
     </div>
-    <div style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table" title="{{game.Hallway1.name}}"><a></a>
-      <div *ngIf="game.Hallway1.players && game.Hallway1.players.length > 0" id="circle" class="{{game.Hallway1.players[0].user.color}}"></div>
+    <div class="room" (click)="moveIfValid(game.Hallway1)" style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table" title="{{game.Hallway1.name}}"><a></a>
+      <div *ngIf="game.Hallway1.players && game.Hallway1.players.length > 0" id="circle" class="{{game.Hallway1.players[0].user.color}} hhallway"></div>
     </div>
-    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.Hall.name}}</a>
+    <div class="room" (click)="moveIfValid(game.Hall)" style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.Hall.name}}</a>
       <table>
         <tr>
           <td *ngIf="game.Hall.players && game.Hall.players.length > 0">
@@ -109,10 +109,10 @@
         </tr>
       </table>
     </div>
-    <div style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table" title="{{game.Hallway2.name}}"><a></a>
-      <div *ngIf="game.Hallway2.players && game.Hallway2.players.length > 0" id="circle" class="{{game.Hallway2.players[0].user.color}}"></div>
+    <div class="room" (click)="moveIfValid(game.Hallway2)" style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table" title="{{game.Hallway2.name}}"><a></a>
+      <div *ngIf="game.Hallway2.players && game.Hallway2.players.length > 0" id="circle" class="{{game.Hallway2.players[0].user.color}} hhallway"></div>
     </div>
-    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.Lounge.name}}</a>
+    <div class="room" (click)="moveIfValid(game.Lounge)" style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.Lounge.name}}</a>
       <table>
         <tr>
           <td *ngIf="game.Lounge.players && game.Lounge.players.length > 0">
@@ -140,18 +140,18 @@
     </div>
   </div>
   <div style="width:100%">
-    <div style="width:40px; height:120px; background:tan; display:inline-block" title="{{game.Hallway3.name}}"><a></a>
-      <div *ngIf="game.Hallway3.players && game.Hallway3.players.length > 0" id="circle" class="{{game.Hallway3.players[0].user.color}}"></div>      
+    <div class="room" (click)="moveIfValid(game.Hallway3)" style="width:40px; height:120px; background:tan; display:inline-block" title="{{game.Hallway3.name}}"><a></a>
+      <div *ngIf="game.Hallway3.players && game.Hallway3.players.length > 0" id="circle" class="{{game.Hallway3.players[0].user.color}} vhallway"></div>      
     </div>
-    <div style="width:40px; height:120px; margin-left:255px; background:tan; display:inline-block" title="{{game.Hallway4.name}}"><a></a>
-      <div *ngIf="game.Hallway4.players && game.Hallway4.players.length > 0" id="circle" class="{{game.Hallway4.players[0].user.color}}"></div>            
+    <div class="room" (click)="moveIfValid(game.Hallway4)" style="width:40px; height:120px; margin-left:255px; background:tan; display:inline-block" title="{{game.Hallway4.name}}"><a></a>
+      <div *ngIf="game.Hallway4.players && game.Hallway4.players.length > 0" id="circle" class="{{game.Hallway4.players[0].user.color}} vhallway"></div>            
     </div>
-    <div style="width:40px; height:120px; margin-left:253px; background:tan; display:inline-block" title="{{game.Hallway5.name}}"><a></a>
-      <div *ngIf="game.Hallway5.players && game.Hallway5.players.length > 0" id="circle" class="{{game.Hallway5.players[0].user.color}}"></div>                  
+    <div class="room" (click)="moveIfValid(game.Hallway5)" style="width:40px; height:120px; margin-left:253px; background:tan; display:inline-block" title="{{game.Hallway5.name}}"><a></a>
+      <div *ngIf="game.Hallway5.players && game.Hallway5.players.length > 0" id="circle" class="{{game.Hallway5.players[0].user.color}} vhallway"></div>                  
     </div>    
   </div>
   <div style="width:100%">
-    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.Library.name}}</a>
+    <div class="room" (click)="moveIfValid(game.Library)" style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.Library.name}}</a>
       <table>
         <tr>
           <td *ngIf="game.Library.players && game.Library.players.length > 0">
@@ -177,10 +177,10 @@
         </tr>
       </table>
     </div>
-    <div style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table" title="{{game.Hallway6.name}}"><a></a>
-      <div *ngIf="game.Hallway6.players && game.Hallway6.players.length > 0" id="circle" class="{{game.Hallway6.players[0].user.color}}"></div>                        
+    <div class="room" (click)="moveIfValid(game.Hallway6)" style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table" title="{{game.Hallway6.name}}"><a></a>
+      <div *ngIf="game.Hallway6.players && game.Hallway6.players.length > 0" id="circle" class="{{game.Hallway6.players[0].user.color}} hhallway"></div>                        
     </div>
-    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.BilliardRoom.name}}</a>
+    <div class="room" (click)="moveIfValid(game.BilliardRoom)" style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.BilliardRoom.name}}</a>
       <table>
         <tr>
           <td *ngIf="game.BilliardRoom.players && game.BilliardRoom.players.length > 0">
@@ -206,10 +206,10 @@
         </tr>
       </table>
     </div>
-    <div style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table" title="{{game.Hallway7.name}}"><a></a>
-      <div *ngIf="game.Hallway7.players && game.Hallway7.players.length > 0" id="circle" class="{{game.Hallway7.players[0].user.color}}"></div>                              
+    <div class="room" (click)="moveIfValid(game.Hallway7)" style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table" title="{{game.Hallway7.name}}"><a></a>
+      <div *ngIf="game.Hallway7.players && game.Hallway7.players.length > 0" id="circle" class="{{game.Hallway7.players[0].user.color}} hhallway"></div>                              
     </div>
-    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.DiningRoom.name}}</a>
+    <div class="room" (click)="moveIfValid(game.DiningRoom)" style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.DiningRoom.name}}</a>
       <table>
         <tr>
           <td *ngIf="game.DiningRoom.players && game.DiningRoom.players.length > 0">
@@ -237,18 +237,18 @@
     </div>
   </div>
   <div style="width:100%">
-    <div style="width:40px; height:120px; background:tan; display:inline-block" title="{{game.Hallway8.name}}"><a></a>
-      <div *ngIf="game.Hallway8.players && game.Hallway8.players.length > 0" id="circle" class="{{game.Hallway8.players[0].user.color}}"></div>                                    
+    <div class="room" (click)="moveIfValid(game.Hallway8)" style="width:40px; height:120px; background:tan; display:inline-block" title="{{game.Hallway8.name}}"><a></a>
+      <div *ngIf="game.Hallway8.players && game.Hallway8.players.length > 0" id="circle" class="{{game.Hallway8.players[0].user.color}} vhallway"></div>                                    
     </div>
-    <div style="width:40px; height:120px; margin-left:255px; background:tan; display:inline-block" title="{{game.Hallway9.name}}"><a></a>
-      <div *ngIf="game.Hallway9.players && game.Hallway9.players.length > 0" id="circle" class="{{game.Hallway9.players[0].user.color}}"></div>                                        
+    <div class="room" (click)="moveIfValid(game.Hallway9)" style="width:40px; height:120px; margin-left:255px; background:tan; display:inline-block" title="{{game.Hallway9.name}}"><a></a>
+      <div *ngIf="game.Hallway9.players && game.Hallway9.players.length > 0" id="circle" class="{{game.Hallway9.players[0].user.color}} vhallway"></div>                                        
     </div>
-    <div style="width:40px; height:120px; margin-left:253px; background:tan; display:inline-block" title="{{game.Hallway10.name}}"><a></a>
-      <div *ngIf="game.Hallway10.players && game.Hallway10.players.length > 0" id="circle" class="{{game.Hallway10.players[0].user.color}}"></div>                                            
+    <div class="room" (click)="moveIfValid(game.Hallway10)" style="width:40px; height:120px; margin-left:253px; background:tan; display:inline-block" title="{{game.Hallway10.name}}"><a></a>
+      <div *ngIf="game.Hallway10.players && game.Hallway10.players.length > 0" id="circle" class="{{game.Hallway10.players[0].user.color}} vhallway"></div>                                            
     </div>    
   </div>
   <div style="width:100%">
-    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.Conservatory.name}}</a>
+    <div class="room" (click)="moveIfValid(game.Conservatory)" style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.Conservatory.name}}</a>
       <table>
         <tr>
           <td *ngIf="game.Conservatory.players && game.Conservatory.players.length > 0">
@@ -274,10 +274,10 @@
         </tr>
       </table>
     </div>
-    <div style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table" title="{{game.Hallway11.name}}"><a></a>
-      <div *ngIf="game.Hallway11.players && game.Hallway11.players.length > 0" id="circle" class="{{game.Hallway11.players[0].user.color}}"></div>                                                
+    <div class="room" (click)="moveIfValid(game.Hallway11)" style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table" title="{{game.Hallway11.name}}"><a></a>
+      <div *ngIf="game.Hallway11.players && game.Hallway11.players.length > 0" id="circle" class="{{game.Hallway11.players[0].user.color}} hhallway"></div>                                                
     </div>
-    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.BallRoom.name}}</a>
+    <div class="room" (click)="moveIfValid(game.BallRoom)" style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.BallRoom.name}}</a>
       <table>
         <tr>
           <td *ngIf="game.BallRoom.players && game.BallRoom.players.length > 0">
@@ -303,10 +303,10 @@
         </tr>
       </table>
     </div>
-    <div style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table" title="{{game.Hallway12.name}}"><a></a>
-      <div *ngIf="game.Hallway12.players && game.Hallway12.players.length > 0" id="circle" class="{{game.Hallway12.players[0].user.color}}"></div>                                                    
+    <div class="room" (click)="moveIfValid(game.Hallway12)" style="width:160px; height:40px; margin-bottom:30px; background:tan; display:inline-table" title="{{game.Hallway12.name}}"><a></a>
+      <div *ngIf="game.Hallway12.players && game.Hallway12.players.length > 0" id="circle" class="{{game.Hallway12.players[0].user.color}} hhallway"></div>                                                    
     </div>
-    <div style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.Kitchen.name}}</a>
+    <div class="room" (click)="moveIfValid(game.Kitchen)" style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.Kitchen.name}}</a>
       <table>
         <tr>
           <td *ngIf="game.Kitchen.players && game.Kitchen.players.length > 0">
@@ -352,6 +352,9 @@
     <!--Logger-->
     <div style="float:right; width: 50%; height:100%; border: 5px solid red;">
       <h6>Logger</h6>
+      <div *ngFor="let message of logMessages">
+        <span>{{message}}</span>
+      </div>
     </div>
   </div>
 </div>
