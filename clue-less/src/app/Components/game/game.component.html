@@ -25,7 +25,7 @@
 
 <!--Button Row-->
 <!--For some reason, can't get the buttons centered, whatever it's fine haha-->
-<div class="btn-toolbar" style="width:700px; border: 2px solid purple;"> 
+<div *ngIf="player.user.isTurn" class="btn-toolbar" style="width:700px; border: 2px solid purple;"> 
   <div class="dropdown" style="padding:5px;">
       <button class="btn btn-secondary btn-m dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Make Suggestion
@@ -405,10 +405,6 @@
             </label><br>
         </fieldset>
     </form>
-</div>
-
-<div *ngIf="player.user.isTurn" style="width: 100%; display: inline-block; padding-top:20px;">
-  <button type="button" (click)="endTurn()">End Turn</button>
 </div>
 
 

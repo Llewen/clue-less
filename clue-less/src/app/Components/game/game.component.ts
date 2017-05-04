@@ -81,7 +81,11 @@ export class GameComponent implements OnInit {
   {
     let playerIndex = this.game.players.map(p => p.serverId).indexOf(player.serverId);
 
-    this.game.players[playerIndex].user.character = player.user.character;
+    if(playerIndex != -1)
+    {
+      this.game.players[playerIndex].user.character = player.user.character;
+      this.game.players[playerIndex].user.color = player.user.color;
+    }
 
     this.checkIfAllHaveChosen();
   }
