@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
    
    //local properties
    route: string;
-   player: ServerUser = new ServerUser("", new Player(""));
+   player: ServerUser = new ServerUser("", new Player("", ""));
    
 
    //constructors
@@ -114,7 +114,7 @@ export class AppComponent implements OnInit {
    logOut()
    {
      this.socket.emit('remove user', this.player);     
-     this.player = new ServerUser("", new Player(""));
+     this.player = new ServerUser("", new Player("", ""));
      this.isLoggedIn = false;
      this.navigate("lobby");
    }

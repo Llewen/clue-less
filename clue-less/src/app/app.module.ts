@@ -6,7 +6,7 @@ import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 //other vendors
-import {SelectButtonModule, DialogModule, DataTableModule,SharedModule} from 'primeng/primeng';
+import {SelectButtonModule, DialogModule, DropdownModule, DataTableModule,SharedModule} from 'primeng/primeng';
 
 //custom components
 import { AppComponent } from './Components/app/app.component';
@@ -35,7 +35,8 @@ import { LobbyComponent } from './Components/lobby/lobby.component';
     BrowserAnimationsModule,
     DataTableModule,
     SharedModule,
-    DialogModule    
+    DialogModule,
+    DropdownModule   
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -10,6 +10,7 @@ import {SelectItem} from 'primeng/primeng';
 import {Lobby} from '../../../../../common/Classes/lobby.class';
 import {ServerUser} from '../../../../../common/Classes/serverUser.class';
 import {Game} from '../../../../../common/Classes/game.class';
+import {Player} from '../../../../../common/Classes/player.class';
 
 @Component({
   selector: 'game',
@@ -44,29 +45,25 @@ export class GameComponent implements OnInit {
 
   //component specific properties
   game: Game;
-  characterImgPath;
-  imageRoot;
   isValidCharacterSelection: boolean = true;
   closeCharacterDialog: boolean = false;
   allPlayersHaveChosen: boolean = false;
+  chosenCharacter = {"character": "", "color": ""};
+  characterSelectionDropdown = [{label:'Select Character', value: null},
+                                {label:'Miss Scarlet', value: {"character": 'Miss Scarlet', "color": 'red'}},
+                                {label:'Colonel Mustard', value: {"character": 'Colonel Mustard', "color": 'yellow'}},
+                                {label:'Mrs. White', value: {"character": 'Mrs. White', "color": 'white'}},
+                                {label:'Mr. Green', value: {"character": 'Mr. Green', "color": 'green'}},
+                                {label:'Mrs. Peacock', value: {"character": 'Mrs. Peacock', "color": 'blue'}},
+                                {label:'Professor Plum', value: {"character": 'Professor Plum', "color": 'purple'}}];
 
  //constructor, watchers
   ngOnInit(){
-    this.imageRoot = "../../../../assets/images/";
     this.game = this.lobby.game;
 
     //server messages
     this.socket.on('game message', (msg) => this.updateGame(msg));
     this.socket.on('player select', (msg) => this.selectPlayer(msg));
-
-    this.characterImgPath = {
-      ColMustard: this.imageRoot + "Colonel Mustard.png",
-      MissWhite: this.imageRoot + "Miss White.jpeg",
-      MrGreen: this.imageRoot + "Mr. Green.png",
-      MrsPeacock: this.imageRoot + "Mrs. Peacock.png",
-      ProfPlum: this.imageRoot + "Prof Plum.png",
-      MissScarlett: this.imageRoot + "Miss Scarlett.png",
-    }
   }
 
   ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
@@ -75,6 +72,9 @@ export class GameComponent implements OnInit {
   updateGame(game: Game)
   {
     this.game = game;
+    let playerIndex = this.game.players.map(p => p.serverId).indexOf(this.player.serverId);
+    this.player = this.game.players[playerIndex];
+    
   }
 
   selectPlayer(player: ServerUser)
@@ -102,8 +102,8 @@ export class GameComponent implements OnInit {
   }
 
   chooseCharacter(){
-    let alreadyChosenIndex = this.game.players.map(p => p.user.character).indexOf(this.player.user.character);
-    if(alreadyChosenIndex != -1)
+    let alreadyChosenIndex = this.game.players.map(p => p.user.character).indexOf(this.chosenCharacter.character);
+    if(alreadyChosenIndex != -1 && this.game.players[alreadyChosenIndex].serverId != this.player.serverId)
     {
       this.isValidCharacterSelection = false;
     }
@@ -112,12 +112,16 @@ export class GameComponent implements OnInit {
       let playerIndex = this.game.players.map(p => p.serverId).indexOf(this.player.serverId);
       if(playerIndex != -1)
       {
+        this.player.user.character = this.chosenCharacter.character;
+        this.player.user.color = this.chosenCharacter.color;
+
         this.game.players[playerIndex].user.character = this.player.user.character;
+        this.game.players[playerIndex].user.color = this.player.user.color;        
       }
 
       this.closeCharacterDialog = true;
-      this.checkIfAllHaveChosen();
       this.socket.emit('player select', this.lobby.name, this.player);
+      this.checkIfAllHaveChosen();      
     }
   }
 
@@ -130,6 +134,94 @@ export class GameComponent implements OnInit {
       }
     });
 
-    this.allPlayersHaveChosen = allChosen;
+    if(allChosen)
+    {
+      this.game.turnIndex = 0;
+      this.allPlayersHaveChosen = allChosen;
+      this.setInitialPositions();    
+      this.setTurn();        
+    }
   }
+
+  setTurn()
+  {
+    let currentCharacterTurn = this.game.turnOrder[this.game.turnIndex];
+
+    let playerIndex = this.game.players.map(p => p.user.character).indexOf(currentCharacterTurn);
+    if(playerIndex != -1)
+    {
+      if(this.game.players[playerIndex].serverId == this.player.serverId)
+      {
+        this.player.user.isTurn = true;
+      }
+      this.game.players[playerIndex].user.isTurn = true;
+    }
+    else{
+      if(this.game.turnIndex == 5)
+      {
+        this.game.turnIndex = 0;
+      }
+      else
+      {
+        this.game.turnIndex += 1;
+      }
+      this.setTurn();
+    }
+  }
+
+  endTurn()
+  {
+    if(this.game.turnIndex == 5)
+    {
+      this.game.turnIndex = 0;
+    }
+    else{
+      this.game.turnIndex += 1;
+    }
+
+    this.player.user.isTurn = false;
+    this.setTurn();
+    this.socket.emit('game message', this.lobby.name, this.game);
+  }
+
+  setInitialPositions()
+  {
+    this.game.players.forEach((p) => {
+      switch(p.user.character)
+      {
+        case "Miss Scarlet":{
+          this.game.Hallway2.players.push(p);
+          break;
+        }
+
+        case "Colonel Mustard":{
+          this.game.Hallway5.players.push(p);
+          break;
+        }
+
+        case "Mrs. White": {
+          this.game.Hallway12.players.push(p);
+          break;
+        }
+
+        case "Mr. Green": {
+          this.game.Hallway11.players.push(p);
+          break;
+        }
+
+        case "Mrs. Peacock": {
+          this.game.Hallway8.players.push(p);
+          break;
+        }
+
+        case "Professor Plum": {
+          this.game.Hallway3.players.push(p);
+          break;
+        }
+      }
+    });
+    
+  }
+
+
 }
