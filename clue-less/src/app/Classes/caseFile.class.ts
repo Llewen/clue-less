@@ -1,4 +1,4 @@
-import { Card } from "./card.class";
+import { Card } from "../../../../common/Classes/card.class";
 
 export class CaseFile{
     who: Card;

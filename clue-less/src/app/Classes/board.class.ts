@@ -1,5 +1,5 @@
 import {GameCharacter} from "./gameCharacter.class";
-import {Room} from "./room.class";
+import {Room} from "../../../../common/Classes/room.class";
 import {Hallway} from "./hallway.class";
 import {Position} from "./position.class";
 
