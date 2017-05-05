@@ -1,11 +1,11 @@
 import { Card } from "../../../../common/Classes/card.class";
 
 export class CaseFile{
-    who: Card;
-    what: Card;
-    where: Card;
+    who;
+    what;
+    where;
 
-    constructur(inputWho: Card, inputWhat: Card, inputWhere: Card){
+    constructor(inputWho: Card, inputWhat: Card, inputWhere: Card){
         this.who = inputWho;
         this.what = inputWhat;
         this.where = inputWhere;

@@ -1,9 +1,14 @@
 import {ServerUser} from './serverUser.class';
 import {Room} from './room.class';
+import {Card} from './card.class';
+import {CaseFile} from '../../clue-less/src/app/Classes/caseFile.class';
 
 export class Game{
     isStarted: boolean;
     players: Array<ServerUser>;
+
+    caseFile: CaseFile;
+    deckAvailableForPlayers: Array<Card>;
 
     //all the rooms
     Study: Room;
@@ -32,6 +37,10 @@ export class Game{
     turnOrder =  ["Miss Scarlet", "Colonel Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Professor Plum"];
     turnIndex = -1;
 
+    rooms = ["Study", "Hall", "Lounge", "Library", "Billard Room", "Dining Room", "Conservatory", "Ball Room", "Kitchen"];
+    characterNames = ['Miss Scarlet', 'Colonel Mustard','Mrs. White','Mr. Green','Mrs. Peacock','Professor Plum'];
+    weapons = ['Rope','Lead Pipe','Knife','Wrench','Candlestick','Revolver'];
+
     constructor(){
         //set the rooms
         this.Study = new Room("Study", 6, ["Kitchen", "Hallway1", "Hallway3"]);
@@ -55,5 +64,60 @@ export class Game{
         this.BallRoom = new Room("Ball Room", 6, ["Hallway11", "Hallway9", "Hallway12"]);
         this.Hallway12 = new Room("Hallway12", 1, ["Ball Room", "Kitchen"]);
         this.Kitchen = new Room("Kitchen", 6, ["Hallway12", "Hallway10", "Study"]);
+    }
+
+    initializeCardsAndCaseFile(){
+        // create random card for case file
+        var randRoomValue = this.rooms.splice(this.randomIntFromInterval(0,this.rooms.length-1),1)[0];
+        var roomCard = new Card("Room", randRoomValue);
+        var randWeaponValue = this.weapons.splice(this.randomIntFromInterval(0,this.weapons.length-1),1)[0];
+        var weaponCard = new Card("Weapon", randWeaponValue );
+        var randCharacterValue = this.characterNames.splice(this.randomIntFromInterval(0, this.characterNames.length-1),1)[0];
+        var characterCard = new Card("Character", randCharacterValue);
+        this.caseFile = new CaseFile(characterCard, weaponCard, roomCard);
+
+        this.deckAvailableForPlayers = new Array<Card>();
+        var self = this;
+        // Create cards with the rest of the values
+        this.rooms.forEach(function(roomName, index){
+            self.deckAvailableForPlayers.push(new Card("room", roomName));
+        })
+
+        this.weapons.forEach(function(weaponName, index){
+            self.deckAvailableForPlayers.push(new Card("weapon", weaponName));
+        });
+        this.characterNames.forEach(function(characterName, index){
+            self.deckAvailableForPlayers.push(new Card("Character", characterName))
+        })
+
+        // Deal out the cards to the players
+        while(this.deckAvailableForPlayers.length > 0){
+            this.dealCards();
+        }
+    }
+
+
+    randomIntFromInterval(min,max)
+    {
+        return Math.floor(Math.random()*(max-min+1)+min);
+    }
+
+    
+    shuffleArray(array) {
+        for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+    }
+
+    dealCards(){
+        var self = this;
+        this.players.forEach(element => {
+            if(self.deckAvailableForPlayers.length > 0){
+                element.user.cards.push(this.deckAvailableForPlayers.pop());
+            }
+        });
     }
 }

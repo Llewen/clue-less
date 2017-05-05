@@ -117,6 +117,7 @@ suggestionReplyDD = [{label:'Select Room', value: null}];
   ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
   }
 
+
   updateGame(game: Game)
   {
     this.game = game;
@@ -148,6 +149,8 @@ suggestionReplyDD = [{label:'Select Room', value: null}];
 
     //this is to register it with the lobby so new players cannot join
     this.registerStartGame.emit(this.lobby);
+
+    this.game.initializeCardsAndCaseFile();
 
     //this is to alert the rest of the players in the game
     this.socket.emit('game message', this.lobby.name, this.game);
@@ -420,7 +423,6 @@ suggestionReplyDD = [{label:'Select Room', value: null}];
         }
         else
         {
-          this.suggestion.from = this.player.serverId;
           this.socket.emit('log message', this.lobby.name, this.player.user.character + " made the following suggestion. Character: " + this.suggestion.character + " Room: " + this.suggestion.room + " Weapon: " + this.suggestion.weapon);
           this.socket.emit('make suggestion', this.suggestion);
         }
@@ -493,7 +495,8 @@ suggestionReplyDD = [{label:'Select Room', value: null}];
 
     if(this.suggestionReplyDD.length > 1)
     {
-      this.showSuggestionReplyDialog = true;      
+      this.showSuggestionReplyDialog = true;
+      document.getElementById("suggBtnRoom").innerHTML = "Room" + this.suggestion.room;      
     }
     else
     {

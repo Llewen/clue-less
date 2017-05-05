@@ -43,7 +43,11 @@
 </p-dialog>
 
 <p-dialog header="Suggestion Reply" [width]="500" [height]="auto" [closable]="false" [visible]="showSuggestionReplyDialog">
-  <label>Card: </label><p-dropdown [options]="suggestionReplyDD" [(ngModel)]="suggestionReply.card" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown>
+  <!--<label>Can you disprove any of the following parts of the Suggestion?</label>
+      <button id="suggBtnRoom"class="btn btn-secondary btn-m" type="button" >{{suggBtnRoom}}</button>  
+      <button id="suggBtnCharacter"class="btn btn-secondary btn-m" type="button">{{suggBtnCharacter}}</button>  
+      <button id="suggBtnWeapon"class="btn btn-secondary btn-m" type="button">{{suggBtnWeapon}}</button>  -->
+  <p-dropdown [options]="suggestionReplyDD" [(ngModel)]="suggestionReply.card" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown>
   <p-footer>
       <button type="button" class="pull-right" aria-label="Reply" (click)="sendSuggestionReply()">Reply</button>
       <span *ngIf="!isValidSuggestionReply">Make sure to select a value for the dropdown</span>
@@ -357,17 +361,14 @@
     <div style="float:left; width:50%;">
       <h6>Cards:</h6>
       <ul class="list-group">
-        <li class="list-group-item" style="height: 30px; padding: 5px 15px;">Room: Whatever</li>
-        <li class="list-group-item" style="height: 30px; padding: 5px 15px;">Weapon: Scary</li>
-        <li class="list-group-item" style="height: 30px; padding: 5px 15px;">Character: Weirdo</li>
-        <li class="list-group-item" style="height: 30px; padding: 5px 15px;">...</li>
-        <li class="list-group-item" style="height: 30px; padding: 5px 15px;">...</li>
-        <li class="list-group-item" style="height: 30px; padding: 5px 15px;">...</li>
+        <div *ngFor="let card of player.user.cards">
+          <li class="list-group-item" style="height: 30px; padding: 5px 15px;"><span>{{card.type}} : {{card.value}}</span></li>
+        </div>
       </ul>
     </div>
 
     <!--Logger-->
-    <div style="float:right; width: 50%; height:100%; border: 5px solid red;">
+    <div style="float:right; width: 50%; height:100%; border: 5px solid red; overflow-y: scroll;">
       <h6>Logger</h6>
       <div *ngFor="let message of logMessages">
         <span>{{message}}</span>

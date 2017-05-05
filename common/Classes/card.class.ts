@@ -1,4 +1,8 @@
 export class Card {
-    type: string;
-    value: string;
+    type;
+    value;
+    constructor(inputType: string, inputValue: string){
+        this.type = inputType;
+        this.value = inputValue;
+    }
 }
