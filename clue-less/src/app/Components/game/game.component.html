@@ -374,7 +374,7 @@
       <h5 style="margin-top: 5px;">Cards</h5>
       <ul class="list-group">
         <div *ngFor="let card of player.user.cards">
-          <li class="list-group-item" style="height: 30px; padding: 5px 15px;"><span>{{card.type}} : {{card.value}}</span></li>
+          <li class="list-group-item" style="padding: 5px 15px;"><span>{{card.type}} : {{card.value}}</span></li>
         </div>
       </ul>
     </div>
@@ -384,7 +384,7 @@
       <h5 style="margin-top: 5px;">Logger</h5>
       <ul class="list-group">
       <div *ngFor="let message of logMessages">
-        <li class="list-group-item" style="height: 30px; padding: 5px 15px;"><span>{{message}}</span></li>
+        <li class="list-group-item" style="padding: 5px 15px;"><span>{{message}}</span></li>
       </div>
       </ul>
     </div>
