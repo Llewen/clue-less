@@ -656,14 +656,14 @@ suggestionReplyDD = [{label:'Select a Card', value: null}];
   {
     //just check with the games case file and then modify cards if loss or display victory: WHO to all if win
     this.socket.emit('log message', this.lobby.name, this.player.user.character + " made the following suggestion. Character: " + this.suggestion.character + " Room: " + this.suggestion.room + " Weapon: " + this.suggestion.weapon);
-    let who: String = this.game.caseFile.who;
-    let what: String = this.game.caseFile.what;
-    let where: String = this.game.caseFile.where;
+    let who: String = this.game.caseFile.who.value;
+    let what: String = this.game.caseFile.what.value;
+    let where: String = this.game.caseFile.where.value;
 
     if(this.suggestion.character == who && this.suggestion.room == where && this.suggestion.weapon == what )
     {
         alert("Success! Your are the Winner!")
-        alert("The Case File revealed that Mr. Boddy was murdered by "+this.suggestion.character+" in the " + this.suggestion.room + "with the weapom: "+ this.suggestion.weapon);
+        alert("The Case File revealed that Mr. Boddy was murdered by "+this.suggestion.character+" in the " + this.suggestion.room + " with the weapon: "+ this.suggestion.weapon);
         this.socket.emit('log message', this.lobby.name, this.player.user.character + "is the Winner!" );
         this.socket.emit('game message', this.lobby.name, this.game);
     }
