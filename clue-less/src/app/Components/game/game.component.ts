@@ -524,6 +524,9 @@ suggestionReplyDD = [{label:'Select a Card', value: null}];
           //Perform the move
 
           containRoom.players.push(this.game.players[characterToMove]);
+
+          this.socket.emit('game message', this.lobby.name, this.game);
+
          // this.addToLog(this.game.players[characterToMove]+"was moved to"+ containRoom.name);
           this.socket.emit('log message', this.lobby.name, this.player.user.character + " made the following suggestion. Character: " + this.suggestion.character + " Room: " + this.suggestion.room + " Weapon: " + this.suggestion.weapon);
           this.socket.emit('make suggestion', this.suggestion);
@@ -653,9 +656,9 @@ suggestionReplyDD = [{label:'Select a Card', value: null}];
   {
     //just check with the games case file and then modify cards if loss or display victory: WHO to all if win
     this.socket.emit('log message', this.lobby.name, this.player.user.character + " made the following suggestion. Character: " + this.suggestion.character + " Room: " + this.suggestion.room + " Weapon: " + this.suggestion.weapon);
-    let who: String = this.game.caseFile.getWho().value;
-    let what: String = this.game.caseFile.getWhat().value;
-    let where: String = this.game.caseFile.getWhere().value;
+    let who: String = this.game.caseFile.who;
+    let what: String = this.game.caseFile.what;
+    let where: String = this.game.caseFile.where;
 
     if(this.suggestion.character == who && this.suggestion.room == where && this.suggestion.weapon == what )
     {
