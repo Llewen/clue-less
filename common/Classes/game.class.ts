@@ -80,11 +80,11 @@ export class Game{
         var self = this;
         // Create cards with the rest of the values
         this.rooms.forEach(function(roomName, index){
-            self.deckAvailableForPlayers.push(new Card("room", roomName));
+            self.deckAvailableForPlayers.push(new Card("Room", roomName));
         })
 
         this.weapons.forEach(function(weaponName, index){
-            self.deckAvailableForPlayers.push(new Card("weapon", weaponName));
+            self.deckAvailableForPlayers.push(new Card("Weapon", weaponName));
         });
         this.characterNames.forEach(function(characterName, index){
             self.deckAvailableForPlayers.push(new Card("Character", characterName))
@@ -102,7 +102,7 @@ export class Game{
         return Math.floor(Math.random()*(max-min+1)+min);
     }
 
-    
+
     shuffleArray(array) {
         for (var i = array.length - 1; i > 0; i--) {
             var j = Math.floor(Math.random() * (i + 1));

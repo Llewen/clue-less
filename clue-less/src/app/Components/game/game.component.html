@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<p-dialog header="Create Lobby" [width]="500" [height]="auto" [closable]="false" [visible]="game.isStarted && !closeCharacterDialog">
+<p-dialog header="Select a Player" [width]="500" [height]="auto" [closable]="false" [visible]="game.isStarted && !closeCharacterDialog">
   <p-dropdown [options]="characterSelectionDropdown" [(ngModel)]="chosenCharacter" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown>
   <p-footer>
       <button type="button" class="pull-right" aria-label="Create" (click)="chooseCharacter()">Choose</button>
@@ -56,24 +56,36 @@
 
 <!--Button Row-->
 <!--For some reason, can't get the buttons centered, whatever it's fine haha-->
-<div *ngIf="player.user.isTurn" class="btn-toolbar" style="width:700px; border: 2px solid purple;"> 
-  <div class="dropdown" style="padding:5px;">
-      <button class="btn btn-secondary btn-m" (click)="showSuggDialog()" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Make Suggestion
-      </button>
-  </div>
+<div style="height: 50px; display:inline-block;">
+  <div *ngIf="player.user.isTurn" class="btn-toolbar" style="width:650px;float:left;"> 
+    <h4 style="padding: 5px;">Your Turn:</h4>
     <div class="dropdown" style="padding:5px;">
-      <button class="btn btn-secondary btn-m" (click)="showAccuseDialog()" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Make Accusation
-      </button>
+        <button class="btn btn-secondary btn-m" (click)="showSuggDialog()" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Make Suggestion
+        </button>
+    </div>
+      <div class="dropdown" style="padding:5px;">
+        <button class="btn btn-secondary btn-m" (click)="showAccuseDialog()" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Make Accusation
+        </button>
+    </div>
+    <div style="margin: 5px;">
+      <button type="button" class="btn btn-danger btn-xs active" (click)="endTurn()">End Turn</button>
+    </div>
   </div>
-  <div style="margin: 5px;">
-    <button type="button" class="btn btn-danger btn-xs active" (click)="endTurn()">End Turn</button>
+  <div style="text-align: center; width: 150px; float: right; border-right: 1px solid black; border-left: 1px solid black;">
+    <h5 style="margin-bottom: 0; padding-bottom: 0;">Current Turn:</h5>
+    <span>{{game.turnOrder[game.turnIndex]}}</span>  
   </div>
 </div>
 
+  <!--<div style="width: 100px; border: 2px solid black; float: right;">
+    <p>Turn: </p>
+  </div>
+</div>-->
+
 <!--Board-->
-<div style="width:650px; border: 2px solid black" class="pull-left">
+<div style="width:650px;" class="pull-left">
   <div style="width:100%;">
     <div class="room" (click)="moveIfValid(game.Study)" style="width:100px; height:100px; background:lightgreen; display:inline-block"><a>{{game.Study.name}}</a>
       <table>
@@ -355,11 +367,11 @@
     </div>
   </div>
   <!--Bottom section-->
-  <div style="position:absolute; bottom:0; height:200px; width:650px; border: 1px solid black; margin-top: 50px;">
+  <div style="position:absolute; bottom:0; height:200px; width:650px; margin-top: 50px; border-top: 1px solid black;">
     
     <!--Cards-->
-    <div style="float:left; width:50%;">
-      <h6>Cards:</h6>
+    <div style="text-align: center; float:left; width:50%; height:100%; overflow-y: scroll;">
+      <h5 style="margin-top: 5px;">Cards</h5>
       <ul class="list-group">
         <div *ngFor="let card of player.user.cards">
           <li class="list-group-item" style="height: 30px; padding: 5px 15px;"><span>{{card.type}} : {{card.value}}</span></li>
@@ -368,17 +380,19 @@
     </div>
 
     <!--Logger-->
-    <div style="float:right; width: 50%; height:100%; border: 5px solid red; overflow-y: scroll;">
-      <h6>Logger</h6>
+    <div style="text-align: center; float:right; width: 50%; height:100%; border-left: 1px solid black; overflow-y: scroll;">
+      <h5 style="margin-top: 5px;">Logger</h5>
+      <ul class="list-group">
       <div *ngFor="let message of logMessages">
-        <span>{{message}}</span>
+        <li class="list-group-item" style="height: 30px; padding: 5px 15px;"><span>{{message}}</span></li>
       </div>
+      </ul>
     </div>
   </div>
 </div>
 
 <!--Notepad-->
-<div class="pull-right" style="width:300px; position:relative; border:2px solid orange;" >
+<div class="pull-right" style="width:300px; position:relative;" >
     <h3>Notepad</h3>
     <hr>
     <form>
