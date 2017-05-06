@@ -23,8 +23,8 @@
   </p-footer>
 </p-dialog>
 
-<p-dialog header="Make Suggestion" [width]="500" [height]="auto" [closable]="false" [visible]="showSuggestionDialog">
-  <label>Character: </label><p-dropdown [options]="suggestionCharacterDD" [(ngModel)]="suggestion.character" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown>
+<p-dialog header="Make Suggestion" [width]="400" [height]="auto" [closable]="true" [visible]="showSuggestionDialog">
+  <label>Character: </label><p-dropdown [options]="suggestionCharacterDD" [(ngModel)]="suggestion.character" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown><br>
   <label>Weapon: </label><p-dropdown [options]="suggestionWeaponDD" [(ngModel)]="suggestion.weapon" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown>  
   <p-footer>
       <button type="button" class="pull-right" aria-label="Suggest" (click)="makeSuggestion()">Suggest</button>
@@ -32,9 +32,9 @@
   </p-footer>
 </p-dialog>
 
-<p-dialog header="Make Accusation" [width]="500" [height]="auto" [closable]="false" [visible]="showAccusationDialog">
-  <label>Character: </label><p-dropdown [options]="suggestionCharacterDD" [(ngModel)]="suggestion.character" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown>
-  <label>Room: </label><p-dropdown [options]="accusationRoomDD" [(ngModel)]="suggestion.room" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown>
+<p-dialog header="Make Accusation" [width]="375" [height]="325"  [closable]="true" [visible]="showAccusationDialog">
+  <label>Character: </label><p-dropdown [options]="suggestionCharacterDD" [(ngModel)]="suggestion.character" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown><br>
+  <label>Room: </label><p-dropdown [options]="accusationRoomDD" [(ngModel)]="suggestion.room" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown><br>
   <label>Weapon: </label><p-dropdown [options]="suggestionWeaponDD" [(ngModel)]="suggestion.weapon" [appendTo]="body" [style]="{'width': '300px'}"></p-dropdown>  
   <p-footer>
       <button type="button" class="pull-right" aria-label="Suggest" (click)="makeAccusation()">Accuse</button>

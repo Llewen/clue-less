@@ -91,7 +91,7 @@ accusationRoomDD =     [{label:'Select Room', value: null},
                         {label:'Ball Room', value: 'Ball Room'},
                         {label:'Kitchen', value: 'Kitchen'}];                            
 
-suggestionWeaponDD = [{label:'Select Room', value: null},
+suggestionWeaponDD = [{label:'Select Weapon', value: null},
                         {label:'Rope', value: 'Rope'},
                         {label:'Lead Pipe', value: 'Lead Pipe'},
                         {label:'Knife', value: 'Knife'},
@@ -99,7 +99,7 @@ suggestionWeaponDD = [{label:'Select Room', value: null},
                         {label:'Candlestick', value: 'Candlestick'},
                         {label:'Revolver', value: 'Revolver'}];  
 
-suggestionReplyDD = [{label:'Select Room', value: null}];
+suggestionReplyDD = [{label:'Select a Card', value: null}];
 
  //constructor, watchers
   ngOnInit(){
@@ -398,6 +398,93 @@ suggestionReplyDD = [{label:'Select Room', value: null}];
     }
   }
 
+ findContainingRoomForSuggestion(player: ServerUser)
+  {
+    if(this.game.Study.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Study;
+    }
+    else if(this.game.Hallway1.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Hallway1;
+    }
+    else if(this.game.Hall.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Hall;
+    }
+    else if(this.game.Hallway2.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Hallway2;
+    }
+    else if(this.game.Lounge.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Lounge;
+    }
+    else if(this.game.Hallway3.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Hallway3;
+    }
+    else if(this.game.Hallway4.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Hallway4;
+    }
+    else if(this.game.Hallway5.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Hallway5;
+    }
+    else if(this.game.Library.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Library;
+    }
+    else if(this.game.Hallway6.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Hallway6;
+    }
+    else if(this.game.BilliardRoom.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.BilliardRoom;
+    }
+    else if(this.game.Hallway7.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Hallway7;
+    }
+    else if(this.game.DiningRoom.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.DiningRoom;
+    }
+    else if(this.game.Hallway8.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Hallway8;
+    }
+    else if(this.game.Hallway9.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Hallway9;
+    }
+    else if(this.game.Hallway10.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Hallway10;
+    }
+    else if(this.game.Conservatory.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Conservatory;
+    }
+    else if(this.game.Hallway11.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Hallway11;
+    }
+    else if(this.game.BallRoom.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.BallRoom;
+    }
+    else if(this.game.Hallway12.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Hallway12;
+    }
+    else if(this.game.Kitchen.players.map(p => p.serverId).indexOf(player.serverId) != -1)
+    {
+      return this.game.Kitchen;
+    }
+  }
 
   addToLog(msg: string)
   {
@@ -420,21 +507,39 @@ suggestionReplyDD = [{label:'Select Room', value: null}];
         {
           this.makingSuggestion = false;
           //display some sort of message to user here saying that the suggestion could not be disproved.
+          alert("Invalid Selection");
         }
         else
         {
+          //find character to be moved
+          let characterToMove = this.game.players.map(p => p.user.character).indexOf(this.suggestion.character);
+
+          // find the starting location of this character
+           let previousRoom:Room= this.findContainingRoomForSuggestion(this.game.players[characterToMove]);
+
+          // Remove from current room
+             let currentRoomPlayerIndex = previousRoom.players.indexOf(this.game.players[characterToMove]);
+             previousRoom.players.splice(currentRoomPlayerIndex, 1);
+
+          //Perform the move
+
+          containRoom.players.push(this.game.players[characterToMove]);
+         // this.addToLog(this.game.players[characterToMove]+"was moved to"+ containRoom.name);
           this.socket.emit('log message', this.lobby.name, this.player.user.character + " made the following suggestion. Character: " + this.suggestion.character + " Room: " + this.suggestion.room + " Weapon: " + this.suggestion.weapon);
           this.socket.emit('make suggestion', this.suggestion);
         }
       }
       else{
         this.isValidSuggestion = false;
+        alert("Please select from the dropdown a character and weapon for suggestion");
       }
     }
     else
     {
       alert("You must be in a room to make a suggestion");
     }
+
+    this.hideSuggDialog();
   }
 
   setWhoIsNextForSuggestion(turnIndex: number)
@@ -527,6 +632,11 @@ suggestionReplyDD = [{label:'Select Room', value: null}];
   {
     this.showSuggestionDialog = true;
   }
+  
+  hideSuggDialog()
+  {
+    this.showSuggestionDialog = false;
+  }
 
   showAccuseDialog()
   {
@@ -534,9 +644,38 @@ suggestionReplyDD = [{label:'Select Room', value: null}];
     this.showAccusationDialog = true;
   }
 
+  hideAccuseDialog()
+  {
+    //this dialog is not currently hooked up
+    this.showAccusationDialog = false;
+  }
   makeAccusation()
   {
     //just check with the games case file and then modify cards if loss or display victory: WHO to all if win
+    this.socket.emit('log message', this.lobby.name, this.player.user.character + " made the following suggestion. Character: " + this.suggestion.character + " Room: " + this.suggestion.room + " Weapon: " + this.suggestion.weapon);
+    let who: String = this.game.caseFile.getWho().value;
+    let what: String = this.game.caseFile.getWhat().value;
+    let where: String = this.game.caseFile.getWhere().value;
+
+    if(this.suggestion.character == who && this.suggestion.room == where && this.suggestion.weapon == what )
+    {
+        alert("Success! Your are the Winner!")
+        alert("The Case File revealed that Mr. Boddy was murdered by "+this.suggestion.character+" in the " + this.suggestion.room + "with the weapom: "+ this.suggestion.weapon);
+        this.socket.emit('log message', this.lobby.name, this.player.user.character + "is the Winner!" );
+        this.socket.emit('game message', this.lobby.name, this.game);
+    }
+    else
+    {
+          alert("Your accusation is invalid. You are now an inactive player, but will remain in the game")
+          this.player.ActivePlayer = false;
+          this.socket.emit('log message', this.lobby.name, this.player.user.character + " Loss the game!" );
+          this.socket.emit('game message', this.lobby.name, this.game);
+
+         // let numOfActivePlayers = this.game.players.filter(function(p >= p.ActivePlayer == true);
+    }
+
     //use this.socket.emit('game message', this.lobby.name, this.game); to update players
+
+    this.hideAccuseDialog();
   }
 }
